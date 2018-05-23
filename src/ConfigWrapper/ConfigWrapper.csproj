@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigWrapper.cs" />
+    <Compile Include="AppSettingsConfigWrapper.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IConfigWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
