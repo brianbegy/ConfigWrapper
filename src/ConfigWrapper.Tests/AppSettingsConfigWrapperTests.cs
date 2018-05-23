@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace ConfigWrapper.Tests
 {
+
     [TestFixture]
     public class AppSettingsConfigWrapperTests
     {

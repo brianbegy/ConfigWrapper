@@ -3,16 +3,20 @@ using System.Collections.Generic;
 
 namespace ConfigWrapper
 {
+    /// <summary>
+    /// helper functions for casting T appropriately
+    /// </summary>
     public static class Helpers
     {
         /// <summary>
         /// casts the input as T returning the default value if none is available.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="input"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-        public static T CastAsT<T>(this object input, T defaultValue) {
+        /// <typeparam name="T">type to return</typeparam>
+        /// <param name="input">value from config</param>
+        /// <param name="defaultValue">the default</param>
+        /// <returns>value or defalut, as appropriate</returns>
+        public static T CastAsT<T>(this object input, T defaultValue)
+        {
             if (input != null)
             {
                 try
@@ -21,9 +25,10 @@ namespace ConfigWrapper
                 }
                 catch (Exception)
                 {
-                                        return defaultValue;
+                    return defaultValue;
                 }
             }
+
             return defaultValue;
         }
 
@@ -32,11 +37,11 @@ namespace ConfigWrapper
         /// e.g. "," == []
         /// "1,2,3,4,5,," == [1,2,3,4,5]
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="input"></param>
-        /// <param name="defaultValue"></param>
-        /// <param name="separators"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">type to return</typeparam>
+        /// <param name="input">value from the config</param>
+        /// <param name="defaultValue">default value to substitute if null</param>
+        /// <param name="separators">array of separator chars such as , or |</param>
+        /// <returns>value from config, or default</returns>
         public static T[] CastAsT<T>(this object input, T[] defaultValue, char[] separators)
         {
             if (input != null)
@@ -47,7 +52,7 @@ namespace ConfigWrapper
                 {
                     try
                     {
-                        var val =  (T)Convert.ChangeType(a, typeof(T));
+                        var val = (T)Convert.ChangeType(a, typeof(T));
                         result.Add(val);
                     }
                     catch (Exception)
@@ -55,10 +60,11 @@ namespace ConfigWrapper
                         return defaultValue;
                     }
                 }
+
                 return result.ToArray();
             }
+
             return defaultValue;
         }
-        
     }
 }
