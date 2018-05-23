@@ -18,7 +18,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
-    <releaseNotes>Initial release.</releaseNotes>
+    <releaseNotes>Improved class and function documentation.</releaseNotes>
     <title>ConfigWrapper</title>
     <description>Helper classes to make it easier to work with config files in .net.</description>
     <copyright>Copyright ©2018 Brian Begy</copyright>
