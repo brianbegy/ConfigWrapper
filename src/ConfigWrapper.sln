@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigWrapper.Tests", "Conf
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E528AFA7-FBFB-4B54-A698-70FF7C154886}"
 	ProjectSection(SolutionItems) = preProject
+		ConfigWrapper\ConfigWrapper.nuspec = ConfigWrapper\ConfigWrapper.nuspec
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
