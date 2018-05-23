@@ -1,1 +1,2 @@
-nuget pack .\ConfigWrapper\ConfigWrapper.nuspec
+ rm .\ConfigWrapper.*.*.*.nupkg
+ nuget pack .\ConfigWrapper\ConfigWrapper.nuspec
