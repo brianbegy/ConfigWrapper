@@ -18,7 +18,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
-    <releaseNotes>Improved class and function documentation.</releaseNotes>
+    <releaseNotes>Add option to throw an exception if config value is of the wrong type.</releaseNotes>
     <title>ConfigWrapper</title>
     <description>Helper classes to make it easier to work with config files in .net.</description>
     <copyright>Copyright ©2018 Brian Begy</copyright>
