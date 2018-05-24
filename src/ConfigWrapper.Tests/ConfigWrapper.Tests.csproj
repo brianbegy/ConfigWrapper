@@ -44,6 +44,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WindowsRegistryConfigWrapperTests.cs" />
     <Compile Include="AppSettingsConfigWrapperTests.cs" />
     <Compile Include="HelpersTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

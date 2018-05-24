@@ -43,7 +43,9 @@
     <Compile Include="AppSettingsConfigWrapper.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IConfigWrapper.cs" />
+    <Compile Include="IWritableConfigWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WindowsRegistryConfigWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
