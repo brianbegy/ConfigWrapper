@@ -11,7 +11,7 @@ namespace ConfigWrapper
     public interface IWritableConfigWrapper : IConfigWrapper
     {
         /// <summary>
-        /// Writes the config value</key>
+        /// Writes the config value
         /// </summary>
         /// <typeparam name="T">Data type to write, must support ToString()</typeparam>
         /// <param name="key">key to use</param>
@@ -19,7 +19,7 @@ namespace ConfigWrapper
         void Set<T>(string key, T value);
 
         /// <summary>
-        /// Writes the config value</key>
+        /// Writes the config value
         /// </summary>
         /// <typeparam name="T">Data type to write, must support ToString()</typeparam>
         /// <param name="key">key to use</param>

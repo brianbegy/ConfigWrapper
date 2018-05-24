@@ -72,21 +72,12 @@ namespace ConfigWrapper.Tests
             Assert.That(result == expectedValue, $"Expected {expectedValue} got {result}.");
         }
 
-        //[Test]
-        //[TestCase("invalid-key",   new []{ 1.99D, 1.89D }, new[] { 1.99D, 1.89D })]
-        //[TestCase("double-array-found", new[] { 1.99D, 1.09D }, new[] { 1.99D, 1.89D })]
-        //public void DoubleArrayTests(string key, double[] defaultValue, double[] expectedValue)
-        //{
-        //    var result = sut.Get<double>(key, defaultValue, new[] { ','});
-        //    Assert.That(result.SequenceEqual(expectedValue), $"Expected {string.Join(",", expectedValue)} got {string.Join(",", result)}.");
-        //}
-
         [Test]
         [TestCase("HKCU/ConfigWrapper/Test/invalid-key", new[] { "pork", "beans" }, new[] { "pork", "beans" })]
         [TestCase("HKCU/ConfigWrapper/Test/stringArrayFound", new[] { "pork", "beans" }, new[] { "spam", "spam", "spam", "spam", "spam", "baked beans", "spam" })]
         public void StringArrayTests(string key, string[] defaultValue, string[] expectedValue)
         {
-            var result = sut.Get<string>(key, defaultValue, new[] { ',' });
+            var result = sut.Get<string>(key, defaultValue, new[] { ',','|' });
             Assert.That(result.SequenceEqual(expectedValue), $"Expected {string.Join(",", expectedValue)} got {string.Join(",", result)}.");
         }
 
@@ -95,7 +86,7 @@ namespace ConfigWrapper.Tests
         public void DoubleBadCastTest(string key, double defaultValue, double expectedValue)
         {
             var ex = Assert.Throws<System.Exception>(() => sut.Get<double>(key, defaultValue, true));
-            Assert.That(ex.Message, Does.StartWith($"Cannot cast 'bar'"));
+            Assert.That(ex.Message, Does.StartWith($"Cannot cast 'stringfound'"));
         }
 
     }

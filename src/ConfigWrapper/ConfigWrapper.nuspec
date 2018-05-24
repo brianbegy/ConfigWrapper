@@ -5,7 +5,7 @@
     <id>ConfigWrapper</id>
 
     <!-- The package version number that is used when resolving dependencies -->
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 
     <!-- Authors contain text that appears directly on the gallery -->
     <authors>Brian Begy</authors>
@@ -18,7 +18,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
-    <releaseNotes>Add option to throw an exception if config value is of the wrong type.</releaseNotes>
+    <releaseNotes>Add WindowsRegistryConfigWrapper to use the Windows registry as a config source.</releaseNotes>
     <title>ConfigWrapper</title>
     <description>Helper classes to make it easier to work with config files in .net.</description>
     <copyright>Copyright ©2018 Brian Begy</copyright>
