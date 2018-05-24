@@ -20,6 +20,15 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 
 In this example, we return 1000 if there is no configured value in the app.config or web.config file.
 
+### Simple values
+
+``` 
+var configWrapper = new AppSettingsConfigWrapper();
+var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
+```
+
+In this example, we return 1000 if there is no configured value in the app.config or web.config file.
+
 ### Arrays
 
 ``` 
@@ -55,6 +64,36 @@ var configWrapper = new AppSettingsConfigWrapper();
 var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000, true);
 //throws an Exception
 ```
+### Sources
+Each config wrapper loads from a different source. 
+
+#### AppSettingsConfigWrapper 
+
+Loads from the current application's app.config or web.config
+
+```
+<appSettings>
+	<add key="sleep-time-in-ms" value="5000"/>
+</appSettings>
+```
+
+``` 
+var configWrapper = new AppSettingsConfigWrapper();
+var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
+// sleepMs = 5000
+```
+
+#### WindowsRegistryConfigWrapper 
+
+``` 
+var configWrapper = new WindowsRegistryConfigWrapper();
+configWrapper.Set<int>("HKLM/MyApplication/MyKey", 5000); 
+var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
+// sleepMs = 5000
+```
+##### WARNING
+The WindowsRegistryConfigWrapper will not modify root level keys e.g. "HKLM."
+The WindowsRegistryConfigWrapper can be used to damage your system and should be used with care.
 
 ## Authors
 
