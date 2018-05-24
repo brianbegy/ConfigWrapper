@@ -67,5 +67,13 @@ namespace ConfigWrapper.Tests
             Assert.That(result == expectedValue, $"Expected {expectedValue} got {result}.");
         }
 
+        [Test]
+        [TestCase("string-found", 11, 1.09D)]
+        public void DoubleBadCastTest(string key, double defaultValue, double expectedValue)
+        {
+            var ex = Assert.Throws<System.Exception>(() => sut.Get<double>(key, defaultValue, true));
+            Assert.That(ex.Message, Does.StartWith($"Cannot cast 'bar'"));
+        }
+
     }
 }
