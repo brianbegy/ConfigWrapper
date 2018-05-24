@@ -12,9 +12,10 @@ Available on Nuget
 
 ## Use
 ### Simple values
+
 ``` 
-	var configWrapper = new AppSettingsConfigWrapper();
-	var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
+var configWrapper = new AppSettingsConfigWrapper();
+var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 ```
 
 In this example, we return 1000 if there is no configured value in the app.config or web.config file.
@@ -22,11 +23,38 @@ In this example, we return 1000 if there is no configured value in the app.confi
 ### Arrays
 
 ``` 
-	var configWrapper = new AppSettingsConfigWrapper();
-	var items = configWrapper.Get<int>("sample-items", new [] {"pork", "beans"}, []{',''|'});
+var configWrapper = new AppSettingsConfigWrapper();
+var items = configWrapper.Get<string[]>("sample-items", new [] {"pork", "beans"}, []{',''|'});
 ```
-In this example, we return an array of strings from the config, delimited by , or |.  If we have no values in config we get the array ["pork", "beans"]
 
+In this example, we return an array of strings from the config, delimited by , or |.  
+
+If we have no values in config we get the array ["pork", "beans"]
+
+### Exceptions
+By default, the AppSettingsConfigWrapper does not throw an exception if a config has a value of the wrong type: it returns the default.
+
+For a config entry:
+```
+<appSettings>
+	<add key="sleep-time-in-ms" value="chicken sandwich"/>
+</appSettings>
+```
+
+``` 
+var configWrapper = new AppSettingsConfigWrapper();
+var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
+// sleepMs = 1000
+```
+
+We try to cast the value "chicken sandwich" to an int, fail and return 1000.
+
+To throw an exception, pass in true for errorOnWrongType.
+``` 
+var configWrapper = new AppSettingsConfigWrapper();
+var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000, true);
+//throws an Exception
+```
 
 ## Authors
 

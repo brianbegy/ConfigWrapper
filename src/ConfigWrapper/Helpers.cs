@@ -14,8 +14,9 @@ namespace ConfigWrapper
         /// <typeparam name="T">type to return</typeparam>
         /// <param name="input">value from config</param>
         /// <param name="defaultValue">the default</param>
+        /// <param name="errorOnWrongType">true = throw an execption if the input value cannot be cast to T.  false = return default if cast fails.</param>
         /// <returns>value or defalut, as appropriate</returns>
-        public static T CastAsT<T>(this object input, T defaultValue)
+        public static T CastAsT<T>(this object input, T defaultValue, bool errorOnWrongType = false)
         {
             if (input != null)
             {
@@ -25,7 +26,14 @@ namespace ConfigWrapper
                 }
                 catch (Exception)
                 {
-                    return defaultValue;
+                    if (errorOnWrongType)
+                    {
+                        throw new Exception($"Cannot cast '{input}' to type {typeof(T).Name}.");
+                    }
+                    else
+                    {
+                        return defaultValue;
+                    }
                 }
             }
 
@@ -41,8 +49,9 @@ namespace ConfigWrapper
         /// <param name="input">value from the config</param>
         /// <param name="defaultValue">default value to substitute if null</param>
         /// <param name="separators">array of separator chars such as , or |</param>
+        /// <param name="errorOnWrongType">true = throw an execption if the input value cannot be cast to T.  false = return default if cast fails.</param>
         /// <returns>value from config, or default</returns>
-        public static T[] CastAsT<T>(this object input, T[] defaultValue, char[] separators)
+        public static T[] CastAsT<T>(this object input, T[] defaultValue, char[] separators, bool errorOnWrongType = false)
         {
             if (input != null)
             {
@@ -57,7 +66,14 @@ namespace ConfigWrapper
                     }
                     catch (Exception)
                     {
-                        return defaultValue;
+                        if (errorOnWrongType)
+                        {
+                            throw new Exception($"Cannot cast {a} to type {typeof(T).Name}.");
+                        }
+                        else
+                        {
+                            return defaultValue;
+                        }
                     }
                 }
 
