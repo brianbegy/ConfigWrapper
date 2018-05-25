@@ -82,7 +82,9 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 // sleepMs = 5000
 ```
 
-#### WindowsRegistryConfigWrapper 
+#### WindowsRegistryConfigWrapper
+
+Loads from the Windows registry.
 
 ``` 
 IWritableConfigWrapper = new WindowsRegistryConfigWrapper();
