@@ -27,19 +27,20 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 
 ### Arrays
 
-In this example, we return an array of strings from the config, delimited by , or |.  
-If we have no values in config we get the array ["pork", "beans"]
+In this example, we return an array of strings from the Windows registry, delimited by , or |.  
+If we have no values for the specified key, we get the array ["pork", "beans"]
 ``` 
 IConfigWrapper = new WindowsRegistryConfigWrapper();
-var items = configWrapper.Get<string[]>("sample-items", new [] {"pork", "beans"}, []{',''|'});
+var items = configWrapper.Get<string[]>("HKCU/topkey/subkey/valuekey", new [] {"pork", "beans"}, []{',''|'});
 ```
 
 ### Exceptions
 
 By default, the neither the AppSettingsConfigWrapper nor the WindowsRegistryConfigWrapper throws an exception if a config has a value of the wrong type. 
-It returns the default.
+If it cannot cast, it returns the default.
 
-For a config entry:
+Example: 
+for a config entry
 ```
 <appSettings>
 	<add key="sleep-time-in-ms" value="chicken sandwich"/>
@@ -53,7 +54,7 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 // sleepMs = 1000
 ```
 
-We try to cast the value "chicken sandwich" to an int, fail and return 1000.
+We try to cast the value "chicken sandwich" to an int.  This fails, so we return 1000.
 
 To throw an exception, pass in true for errorOnWrongType.
 ``` 
@@ -94,7 +95,9 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
 
 While the WindowsRegistryConfigWrapper will not modify root level keys e.g. "HKLM", it should be used with care.  It is a sharp knife, be careful.
 
-## Help Wanted
+#### JSON config wrapper
+
+** coming soon ** (help wanted)
 
 ## Authors
 
