@@ -30,12 +30,14 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 In this example, we return an array of strings from the config, delimited by , or |.  
 If we have no values in config we get the array ["pork", "beans"]
 ``` 
-IConfigWrapper = new AppSettingsConfigWrapper();
+IConfigWrapper = new WindowsRegistryConfigWrapper();
 var items = configWrapper.Get<string[]>("sample-items", new [] {"pork", "beans"}, []{',''|'});
 ```
 
 ### Exceptions
-By default, the AppSettingsConfigWrapper does not throw an exception if a config has a value of the wrong type: it returns the default.
+
+By default, the neither the AppSettingsConfigWrapper nor the WindowsRegistryConfigWrapper throws an exception if a config has a value of the wrong type. 
+It returns the default.
 
 For a config entry:
 ```
@@ -52,6 +54,7 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 ```
 
 We try to cast the value "chicken sandwich" to an int, fail and return 1000.
+
 To throw an exception, pass in true for errorOnWrongType.
 ``` 
 IConfigWrapper = new AppSettingsConfigWrapper();
