@@ -11,11 +11,17 @@ Available on Nuget
 .net 4.0 + 
 
 ## Use
+
+### Interfaces
+
+The IConfigWrapper provides the contract for reading config values.  
+The IWritableConfigWrapper provides the contract for reading and writing values. 
+
 ### Simple values
 
 In this example, we return 1000 if there is no configured value in the app.config or web.config file.
 ``` 
-var configWrapper = new AppSettingsConfigWrapper();
+IConfigWrapper = new AppSettingsConfigWrapper();
 var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 ```
 
@@ -24,7 +30,7 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 In this example, we return an array of strings from the config, delimited by , or |.  
 If we have no values in config we get the array ["pork", "beans"]
 ``` 
-var configWrapper = new AppSettingsConfigWrapper();
+IConfigWrapper = new AppSettingsConfigWrapper();
 var items = configWrapper.Get<string[]>("sample-items", new [] {"pork", "beans"}, []{',''|'});
 ```
 
@@ -40,7 +46,7 @@ For a config entry:
 
 and the code
 ``` 
-var configWrapper = new AppSettingsConfigWrapper();
+IConfigWrapper = new AppSettingsConfigWrapper();
 var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 // sleepMs = 1000
 ```
@@ -48,7 +54,7 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 We try to cast the value "chicken sandwich" to an int, fail and return 1000.
 To throw an exception, pass in true for errorOnWrongType.
 ``` 
-var configWrapper = new AppSettingsConfigWrapper();
+IConfigWrapper = new AppSettingsConfigWrapper();
 var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000, true);
 //throws an Exception
 ```
@@ -67,7 +73,7 @@ Loads from the current application's app.config or web.config
 ```
 
 ``` 
-var configWrapper = new AppSettingsConfigWrapper();
+IConfigWrapper configWrapper = new AppSettingsConfigWrapper();
 var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 // sleepMs = 5000
 ```
@@ -75,14 +81,17 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 #### WindowsRegistryConfigWrapper 
 
 ``` 
-var configWrapper = new WindowsRegistryConfigWrapper();
+IWritableConfigWrapper = new WindowsRegistryConfigWrapper();
 configWrapper.Set<int>("HKLM/MyApplication/MyKey", 5000); 
 var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
 // sleepMs = 5000
 ```
 
 ##### WARNING
+
 While the WindowsRegistryConfigWrapper will not modify root level keys e.g. "HKLM", it should be used with care.  It is a sharp knife, be careful.
+
+## Help Wanted
 
 ## Authors
 
