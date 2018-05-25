@@ -82,7 +82,7 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
 ```
 
 ##### WARNING
-While the WindowsRegistryConfigWrapper will not modify root level keys e.g. "HKLM.", it should be used with care.  It is a sharp knife, be careful.
+While the WindowsRegistryConfigWrapper will not modify root level keys e.g. "HKLM", it should be used with care.  It is a sharp knife, be careful.
 
 ## Authors
 
