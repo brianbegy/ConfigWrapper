@@ -19,7 +19,7 @@
 
     <!-- Any details about this particular release -->
     <releaseNotes>Initial release to support json configuration files.</releaseNotes>
-    <title>ConfigWrapper</title>
+    <title>ConfigWrapper.Json</title>
     <description>Helper classes to make it easier to work with config files in .net.  Supports using web.config, app.config, json, and Windows registry for configuration.</description>
     <copyright>Copyright ©2018 Brian Begy</copyright>
 
