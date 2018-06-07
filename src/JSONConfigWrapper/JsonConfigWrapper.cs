@@ -1,4 +1,8 @@
-﻿using ConfigWrapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
+using ConfigWrapper;
 using Newtonsoft.Json.Linq;
 using System.Text;
 
@@ -9,7 +13,7 @@ namespace JSONConfigWrapper
         /// <summary>
         /// internal json object
         /// </summary>
-        private JObject json = new JObject();
+        private JObject json;
 
         /// <summary>
         /// Constructor for the config wrapper
@@ -47,7 +51,16 @@ namespace JSONConfigWrapper
         /// <inheritdocs />
         public T Get<T>(string key, T defaultValue, bool errorOnWrongType)
         {
-            return json.SelectToken(key).CastAsT<T>(defaultValue, false);
+            Object obj = null;
+            try
+            {
+                obj = json.SelectToken(key);
+            }
+            catch (Exception)
+            {
+                //do nothing
+            }
+            return obj.CastAsT<T>(defaultValue, false);
         }
 
         /// <inheritdocs />
@@ -56,10 +69,60 @@ namespace JSONConfigWrapper
             return this.Get<T>(key, defaultValue, separators, false);
         }
 
-        /// <inheritdocs />
+        /// <summary>
+        /// returns an array of values for the key.  If null or the wrong type, returns the default.
+        /// </summary>
+        /// <typeparam name="T">type of the value</typeparam>
+        /// <param name="key">key in the config</param>
+        /// <param name="defaultValue">default value to substitute if null</param>
+        /// <param name="separators">This param is only used if the value in the json file is a string instead of an array.</param>
+        /// <param name="errorOnWrongType">true = we should throw an error if the config data cannot be cast.  false = use default</param>
+        /// <returns>value or default</returns>
         public T[] Get<T>(string key, T[] defaultValue, char[] separators, bool errorOnWrongType)
         {
-            return json.SelectToken(key).CastAsT<T>(defaultValue, separators, false);
+            string[] obj = null;
+            try
+            {
+                if (json.ContainsKey(key))
+                {
+                    if (json[key] is JArray)
+                    {
+                        var result = new List<T>();
+                        foreach (var a in ((JArray)json[key]).Select(aa => aa.Value<string>()))
+                        {
+
+                            try
+                            {
+                                var val = (T)Convert.ChangeType(a, typeof(T));
+                                result.Add(val);
+                            }
+                            catch (Exception)
+                            {
+                                if (errorOnWrongType)
+                                {
+                                    throw new Exception($"Cannot cast {a} to type {typeof(T).Name}.");
+                                }
+                                else
+                                {
+                                    return defaultValue;
+                                }
+                            }
+                        }
+
+                        return result.ToArray();
+                    }
+
+                    return json.SelectToken(key).Value<string>().CastAsT(defaultValue, separators, errorOnWrongType);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //do nothing
+            }
+
+            return obj.CastAsT<T>(defaultValue, separators, errorOnWrongType);
         }
+
     }
 }

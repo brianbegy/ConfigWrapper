@@ -1,0 +1,22 @@
+﻿{
+  "simplekey": "foo",
+  "category": {
+    "key": "foo"
+  },
+  "topcategory": {
+    "subcategory": {
+      "key": "foo"
+    }
+  },
+  "string-array-found": [
+    "spam",
+    "spam",
+    "spam",
+    "spam",
+    "spam",
+    "baked beans",
+    "spam"
+  ],
+  "string-array-as-string": "spam,spam,spam,spam,spam,baked beans,spam",
+  "decimal-found": 1.09
+}
