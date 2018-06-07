@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ConfigWrapper")]
-[assembly: AssemblyDescription("Simple configuration library for working with app.config and web.config.")]
+[assembly: AssemblyTitle("JSONConfigWrapper")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Brian Begy")]
-[assembly: AssemblyProduct("ConfigWrapper")]
-[assembly: AssemblyCopyright("Copyright © Brian Begy 2018")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("JSONConfigWrapper")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("83d38aba-e941-478f-83f1-f053d54b08a3")]
+[assembly: Guid("b6486dcf-1693-4462-8b30-ce4acf7dcf00")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.1.0")]
-[assembly: AssemblyFileVersion("1.3.1.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

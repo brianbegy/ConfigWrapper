@@ -44,7 +44,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\test.json" />
     <Compile Include="IniTests.cs" />
+    <Compile Include="JsonTests.cs" />
     <Compile Include="WindowsRegistryConfigWrapperTests.cs" />
     <Compile Include="AppSettingsConfigWrapperTests.cs" />
     <Compile Include="HelpersTests.cs" />
@@ -56,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConfigWrapper.Json\ConfigWrapper.Json.csproj">
+      <Project>{b6486dcf-1693-4462-8b30-ce4acf7dcf00}</Project>
+      <Name>ConfigWrapper.Json</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ConfigWrapper\ConfigWrapper.csproj">
       <Project>{83d38aba-e941-478f-83f1-f053d54b08a3}</Project>
       <Name>ConfigWrapper</Name>
