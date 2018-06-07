@@ -97,6 +97,13 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
 
 While the WindowsRegistryConfigWrapper will not modify root level keys e.g. "HKLM", it should be used with care.  It is a sharp knife, be careful.
 
+#### IniConfigWrapper
+
+Supports ini files with values like 
+```
+myvalue=foo
+```
+
 #### JSON config wrapper
 
 ** coming soon ** (help wanted)
