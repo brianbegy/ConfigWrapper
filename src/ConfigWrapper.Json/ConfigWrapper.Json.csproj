@@ -7,8 +7,8 @@
     <ProjectGuid>{B6486DCF-1693-4462-8B30-CE4ACF7DCF00}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JSONConfigWrapper</RootNamespace>
-    <AssemblyName>JSONConfigWrapper</AssemblyName>
+    <RootNamespace>ConfigWrapper.Json</RootNamespace>
+    <AssemblyName>ConfigWrapper.Json</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConfigWrapper, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ConfigWrapper.1.3.0\lib\net40\ConfigWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -44,12 +47,6 @@
   <ItemGroup>
     <Compile Include="JsonConfigWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ConfigWrapper\ConfigWrapper.csproj">
-      <Project>{83d38aba-e941-478f-83f1-f053d54b08a3}</Project>
-      <Name>ConfigWrapper</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

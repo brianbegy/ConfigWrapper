@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
-using ConfigWrapper;
-using Newtonsoft.Json.Linq;
 using System.Text;
 
-namespace JSONConfigWrapper
+namespace ConfigWrapper.Json
 {
     public class JsonConfigWrapper : IConfigWrapper
     {

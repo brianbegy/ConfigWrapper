@@ -58,13 +58,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConfigWrapper.Json\ConfigWrapper.Json.csproj">
+      <Project>{b6486dcf-1693-4462-8b30-ce4acf7dcf00}</Project>
+      <Name>ConfigWrapper.Json</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ConfigWrapper\ConfigWrapper.csproj">
       <Project>{83d38aba-e941-478f-83f1-f053d54b08a3}</Project>
       <Name>ConfigWrapper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\JSONConfigWrapper\JsonConfigWrapper.csproj">
-      <Project>{B6486DCF-1693-4462-8B30-CE4ACF7DCF00}</Project>
-      <Name>JsonConfigWrapper</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

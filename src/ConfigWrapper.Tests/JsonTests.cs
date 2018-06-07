@@ -1,6 +1,6 @@
 ﻿using System.Linq;
+using ConfigWrapper.Json;
 using FluentAssertions;
-using JSONConfigWrapper;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
