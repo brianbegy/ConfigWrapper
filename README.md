@@ -105,7 +105,15 @@ myvalue=foo
 ```
 
 #### JSON config wrapper
+The json wrapper is in a separate nuget package: ConfigWrapper.Json.  It has a dependency on Newtonsoft, so it is distributed separately from ConfigWrapper.
 
+
+```
+IConfigWrapper configWrapper = new JsonConfigWrapper("../data.json");
+var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
+// sleepMs = 5000
+
+```
 ** coming soon ** (help wanted)
 
 ## Authors
