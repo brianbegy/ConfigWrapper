@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ConfigWrapper.Json")]
-[assembly: AssemblyDescription("Simple configuration library for working with app.config and web.config.")]
+[assembly: AssemblyDescription("Simple configuration library for working with json configuration files.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Brian Begy")]
 [assembly: AssemblyProduct("ConfigWrapper.Json")]
