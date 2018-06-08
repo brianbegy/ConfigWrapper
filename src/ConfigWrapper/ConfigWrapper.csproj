@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IConfigKeysReader.cs" />
     <Compile Include="IniConfigWrapper.cs" />
     <Compile Include="AppSettingsConfigWrapper.cs" />
     <Compile Include="Helpers.cs" />

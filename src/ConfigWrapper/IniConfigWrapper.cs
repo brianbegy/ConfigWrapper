@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace ConfigWrapper
     /// <summary>
     /// Loads values from an ini file
     /// </summary>
-    public class IniConfigWrapper : IConfigWrapper
+    public class IniConfigWrapper : IConfigWrapper, IConfigKeysReader
     {
         /// <summary>
         /// Path to the config file
@@ -19,6 +20,8 @@ namespace ConfigWrapper
         /// valid delimiters for the config file
         /// </summary>
         private readonly char[] _validDelimiters;
+
+        private readonly char[] _commentCharacters = new []{';'};
 
         /// <summary>
         /// Encoding of the config file
@@ -116,6 +119,40 @@ namespace ConfigWrapper
                 }
             }
             return null;
+        }
+
+        public string[] AllKeys()
+        {
+            var result = new List<string>();
+            using (var fs = new FileStream(this._iniPath, FileMode.Open))
+            {
+                using (var sr = new StreamReader(fs, this._encoding))
+                {
+                    var thisSection = string.Empty;
+                    while (!sr.EndOfStream)
+                    {
+                        var thisLine = sr.ReadLine();
+                        if (thisLine != null)
+                        {
+                            if (thisLine.Trim().StartsWith("[") && thisLine.Trim().EndsWith("]"))
+                            {
+                                // this line is a section marker
+                                thisSection = thisLine.Trim().TrimStart('[').TrimEnd(']');
+                            }
+                            else
+                            {
+                                if (!_commentCharacters.Any(aa=> thisLine.StartsWith(aa.ToString())) && _validDelimiters.Any(aa => thisLine.Contains(aa)))
+                                {
+                                    result.Add((String.IsNullOrEmpty(thisSection)? string.Empty: $"{thisSection}.")+
+                                        thisLine.Split(_validDelimiters, StringSplitOptions.RemoveEmptyEntries)[0]);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            return result.ToArray();
         }
     }
 }
