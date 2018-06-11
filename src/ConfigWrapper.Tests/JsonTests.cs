@@ -2,13 +2,12 @@
 using ConfigWrapper.Json;
 using FluentAssertions;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace ConfigWrapper.Tests
 {
     public class JsonTests
     {
-        private JsonConfigWrapper sut = new  JsonConfigWrapper($"{TestContext.CurrentContext.TestDirectory}../../../data/test.json");
+        private JsonConfigWrapper sut = new JsonConfigWrapper($"{TestContext.CurrentContext.TestDirectory}../../../data/test.json");
 
         [Test]
         [TestCase("simplekey", "value", "foo")]
@@ -30,6 +29,7 @@ namespace ConfigWrapper.Tests
             var result = sut.Get<string>(key, defaultValue, new[] { ',' });
             Assert.That(result.SequenceEqual(expectedValue), $"Expected {string.Join(",", expectedValue)} got {string.Join(",", result)}.");
         }
+
         [Test]
         public void DecimalTests()
         {
@@ -42,6 +42,16 @@ namespace ConfigWrapper.Tests
         {
             var result = sut.Get<decimal>(key, defaultValue);
             Assert.That(result == expectedValue, $"Expected {expectedValue} got {result}.");
+        }
+
+        [Test]
+        public void AllKeys()
+        {
+            var result = sut.AllKeys();
+            result.Length.Should().Be(6);
+            result.Should().Contain("simplekey");
+            result.Should().Contain("topcategory.subcategory.key");
+            result.Should().Contain("string-array-found");
         }
 
     }
