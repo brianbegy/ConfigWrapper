@@ -122,5 +122,15 @@ namespace ConfigWrapper.Json
             return obj.CastAsT<T>(defaultValue, separators, errorOnWrongType);
         }
 
+        public string[] AllKeys()
+        {
+            return json.Descendants().Where(aa=>!aa.HasValues).Select(aa => System.Text.RegularExpressions.Regex.Replace(aa.Path,@"[\d]","").Replace("[]","")).Distinct().ToArray();
+        }
+
+        public string[] AllKeys(string topKey)
+        {
+            return AllKeys().Where(aa=>aa.StartsWith(topKey)).ToArray();
+        }
+
     }
 }
