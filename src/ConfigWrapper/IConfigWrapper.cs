@@ -1,10 +1,24 @@
-﻿namespace ConfigWrapper
+﻿using System;
+
+namespace ConfigWrapper
 {
     /// <summary>
     /// contract for defining a configuration source
     /// </summary>
-    public interface IConfigWrapper
+    public interface IConfigWrapper 
     {
+        /// <summary>
+        /// Returns all keys in the given config
+        /// </summary>
+        /// <returns></returns>
+        string[] AllKeys();
+
+        /// <summary>
+        /// Returns all keys in the given config
+        /// </summary>
+        /// <returns></returns>
+        string[] AllKeys(string topKey);
+
         /// <summary>
         /// returns the value for the key.  If null or the wrong type, returns the default.
         /// </summary>
