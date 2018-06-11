@@ -34,7 +34,7 @@ namespace ConfigWrapper
         public string[] AllKeys(string topKey)
         {
             var top = this.GetKey(topKey);
-            return this.GetChildren(top, topKey);
+            return this.GetChildren(top);
         }
 
         private RegistryKey GetKey(string topKey) {
@@ -62,7 +62,7 @@ namespace ConfigWrapper
             return currKey;
         }
 
-        private string[] GetChildren(RegistryKey key, string path)
+        private string[] GetChildren(RegistryKey key)
         {
             var result = new List<string>();
             foreach (var vals in key.GetValueNames()) {
@@ -71,7 +71,7 @@ namespace ConfigWrapper
 
             foreach (var sk in key.GetSubKeyNames())
             {
-                result.AddRange(this.GetChildren(key.OpenSubKey(sk), key.Name));
+                result.AddRange(this.GetChildren(key.OpenSubKey(sk)));
             }
             return result.ToArray();
         }
@@ -93,29 +93,6 @@ namespace ConfigWrapper
             throw new NotImplementedException($"Cannot load key {key}.  Top level key must be one of: {String.Join(",", HKLM.Union(HKCU).Union(HKCC))}.");
         }
     
-
-
-        private string[] GetChildKeyNames(string[] key)
-        {
-        var result = new List<string>();
-
-            var parent = this.GetParentKey(key, false, false);
-            var thisKey = parent.OpenSubKey(key.Last());
-            if (thisKey.SubKeyCount == 0)
-            {
-                result.Add(thisKey.Name);
-            }
-
-            foreach (var k in parent.GetSubKeyNames())
-            {
-                var thisChild = key.ToList();
-                thisChild.Add(k);
-                result.AddRange(this.GetChildKeyNames(thisChild.ToArray()));
-            }
-
-            return result.ToArray();
-        }
-
         /// <inheritdocs />
         public T Get<T>(string key, T defaultValue)
         {
