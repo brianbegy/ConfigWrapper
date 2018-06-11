@@ -20,5 +20,14 @@ namespace ConfigWrapper.Tests
             sut.Get(key, defaultValue).Should().Be(expected);
         }
 
+        [Test]
+        public void GetAllKeys()
+        {
+            var sut = new IniConfigWrapper($"{TestContext.CurrentContext.TestDirectory}../../../data/test.ini");
+             sut.AllKeys().Length.Should().Be(2);
+            sut.AllKeys().First().Should().Be("foo");
+            sut.AllKeys().Last().Should().Be("Section.value");
+        }
+
     }
 }

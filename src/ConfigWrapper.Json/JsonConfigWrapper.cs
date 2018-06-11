@@ -56,7 +56,7 @@ namespace ConfigWrapper.Json
             }
             catch (Exception)
             {
-                //do nothing
+                // do nothing
             }
             return obj.CastAsT<T>(defaultValue, false);
         }
@@ -116,7 +116,7 @@ namespace ConfigWrapper.Json
             }
             catch (Exception ex)
             {
-                //do nothing
+                // do nothing
             }
 
             return obj.CastAsT<T>(defaultValue, separators, errorOnWrongType);

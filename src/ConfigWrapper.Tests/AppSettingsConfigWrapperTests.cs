@@ -33,7 +33,7 @@ namespace ConfigWrapper.Tests
         public void DoubleTests(string key, double defaultValue, double expectedValue)
         {
             var result = sut.Get<double>(key, defaultValue);
-            Assert.That(result == expectedValue, $"Expected {expectedValue} got {result}.");
+            Assert.That(result.Equals(expectedValue), $"Expected {expectedValue} got {result}.");
         }
 
         [Test]

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Win32;
 
 namespace ConfigWrapper
 {
@@ -23,6 +25,74 @@ namespace ConfigWrapper
         /// </summary>
         private static readonly string[] HKCC = new[] { "hkcc", "hkey_current_config" };
 
+        public string[] AllKeys()
+        {
+            throw new NotImplementedException("The windows registry config wrapper does not support listing every registry key on the system.  That seems like a bad idea.");
+        }
+        
+        /// <inheritdoc />
+        public string[] AllKeys(string topKey)
+        {
+            var top = this.GetKey(topKey);
+            return this.GetChildren(top);
+        }
+
+        private RegistryKey GetKey(string topKey) {
+
+            var keysAsList = this.GetKeyAsArray(topKey).ToList();
+            var top = this.GetTopKey(keysAsList[0]);
+            var currKey = top;
+            keysAsList.RemoveAt(0);
+            while (keysAsList.Any()) {
+                if (keysAsList.Count() == 1) {
+                    if (keysAsList.Last() == currKey.Name) {
+                        return currKey;
+                    }
+                    if (currKey.GetSubKeyNames().Any(aa => aa == keysAsList.First())) {
+                        return currKey.OpenSubKey(keysAsList.First());
+                    }
+                }
+                if (!currKey.GetSubKeyNames().Any(aa => aa == keysAsList.First())) {
+                    throw new ArgumentException($"Registry key {currKey.Name} does not have a child key called {keysAsList.First()}.");
+                } else {
+                    currKey = currKey.OpenSubKey(keysAsList.First());
+                    keysAsList.RemoveAt(0);
+                }
+            }
+            return currKey;
+        }
+
+        private string[] GetChildren(RegistryKey key)
+        {
+            var result = new List<string>();
+            foreach (var vals in key.GetValueNames()) {
+                result.Add($"{key.Name}\\{vals}"); 
+                        }
+
+            foreach (var sk in key.GetSubKeyNames())
+            {
+                result.AddRange(this.GetChildren(key.OpenSubKey(sk)));
+            }
+            return result.ToArray();
+        }
+        private RegistryKey GetTopKey(string key) {
+            if (HKLM.Contains(key.ToLowerInvariant()))
+            {
+                return Registry.LocalMachine;
+            }
+
+            if (HKCU.Contains(key.ToLowerInvariant()))
+            {
+                return Registry.CurrentUser;
+            }
+
+            if (HKCC.Contains(key.ToLowerInvariant()))
+            {
+                return Registry.CurrentConfig;
+            }
+            throw new NotImplementedException($"Cannot load key {key}.  Top level key must be one of: {String.Join(",", HKLM.Union(HKCU).Union(HKCC))}.");
+        }
+    
         /// <inheritdocs />
         public T Get<T>(string key, T defaultValue)
         {
@@ -138,20 +208,7 @@ namespace ConfigWrapper
             {
                 if (i == 0)
                 {
-                    if (HKLM.Contains(elements[0].ToLowerInvariant()))
-                    {
-                        key = Microsoft.Win32.Registry.LocalMachine;
-                    }
-
-                    if (HKCU.Contains(elements[0].ToLowerInvariant()))
-                    {
-                        key = Microsoft.Win32.Registry.CurrentUser;
-                    }
-
-                    if (HKCC.Contains(elements[0].ToLowerInvariant()))
-                    {
-                        key = Microsoft.Win32.Registry.CurrentConfig;
-                    }
+                    key = this.GetTopKey(elements[0]);
                 }
                 else
                 {

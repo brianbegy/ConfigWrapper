@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Linq;
+using FluentAssertions;
 
 namespace ConfigWrapper.Tests
 {
@@ -89,5 +90,12 @@ namespace ConfigWrapper.Tests
             Assert.That(ex.Message, Does.StartWith($"Cannot cast 'stringfound'"));
         }
 
+        [Test]
+        public void GetKeys()
+        {
+            var result = sut.AllKeys("HKCU/ConfigWrapper");
+            result.Count().Should().Be(4);
+            result.First().Should().Be(@"HKEY_CURRENT_USER\ConfigWrapper\Test\integerfound");
+        }
     }
 }

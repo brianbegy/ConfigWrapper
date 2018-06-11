@@ -1,10 +1,22 @@
-﻿namespace ConfigWrapper
+﻿using System.Linq;
+
+namespace ConfigWrapper
 {
     /// <summary>
     /// Simple config wrapper that draws values from app.config and web.config
     /// </summary>
     public class AppSettingsConfigWrapper : IConfigWrapper
     {
+        public string[] AllKeys()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings.AllKeys;
+        }
+
+        public string[] AllKeys(string topKey)
+        {
+            return System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(aa => aa.StartsWith(topKey)).ToArray();
+        }
+
         /// <inheritdoc/>
         public T Get<T>(string key, T defaultValue)
         {
