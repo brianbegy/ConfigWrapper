@@ -7,10 +7,10 @@ get-childItem ConfigWrapper.Json/packages -recurse | remove-item -recurse -force
 nuget restore ConfigWrapper.sln
 
 ## clean and build the soluion
-msbuild ConfigWrapper.sln  /t:Clean
-msbuild ConfigWrapper.sln  /t:build /p:Configuration=Release /p:TargetFramework=v4.0
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe ConfigWrapper.sln  /t:Clean
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe ConfigWrapper.sln  /t:build /p:Configuration=Release /p:TargetFramework=v4.0
 
  rm .\ConfigWrapper.*.*.*.nupkg
  
  nuget pack .\ConfigWrapper\ConfigWrapper.nuspec
-  nuget pack .\ConfigWrapper.Json\ConfigWrapper.json.nuspec
+ nuget pack .\ConfigWrapper.Json\ConfigWrapper.json.nuspec
