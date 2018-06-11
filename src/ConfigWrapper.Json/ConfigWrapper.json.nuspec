@@ -5,7 +5,7 @@
     <id>ConfigWrapper.Json</id>
 
     <!-- The package version number that is used when resolving dependencies -->
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 
     <!-- Authors contain text that appears directly on the gallery -->
     <authors>Brian Begy</authors>
@@ -18,15 +18,15 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
-    <releaseNotes>Initial release to support json configuration files.</releaseNotes>
+    <releaseNotes>Add AllKeys() to the JsonConfigWrapper.</releaseNotes>
     <title>ConfigWrapper.Json</title>
-    <description>Helper classes to make it easier to work with config files in .net.  Supports using web.config, app.config, json, and Windows registry for configuration.</description>
+    <description>Helper classes to make it easier to work with json config files. Part of the ConfigWrapper project.</description>
     <copyright>Copyright ©2018 Brian Begy</copyright>
 
     <!-- Tags appear in the gallery and can be used for tag searches -->
     <tags>configuration</tags>
     <dependencies>
-      <dependency id="ConfigWrapper" version="1.3.0"/>
+      <dependency id="ConfigWrapper" version="1.4.0"/>
       <dependency id="Newtonsoft.Json" version="11.0.0"/>
     </dependencies>
 
