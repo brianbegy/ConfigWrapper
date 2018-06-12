@@ -14,7 +14,7 @@
     <!-- License and project URLs provide links for the gallery -->
     <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>http://github.com/brianbegy/ConfigWrapper</projectUrl>
-
+  
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
