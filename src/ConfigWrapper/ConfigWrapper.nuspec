@@ -18,7 +18,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
-    <releaseNotes>Support extracting all keys from ini files.</releaseNotes>
+    <releaseNotes>Add an in-memory config wrapper to support unit test scenarios.</releaseNotes>
     <title>ConfigWrapper</title>
     <description>Helper classes to make it easier to work with config files in .net.  
       Supports using web.config, app.config, and Windows registry for configuration.  
