@@ -104,7 +104,7 @@ Supports ini files with values like
 myvalue=foo
 ```
 
-#### JSON config wrapper
+#### JSONConfigWrapper
 The json wrapper is in a separate nuget package: ConfigWrapper.Json.  It has a dependency on Newtonsoft, so it is distributed separately from ConfigWrapper.
 
 
@@ -114,7 +114,10 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
 // sleepMs = 5000
 
 ```
-** coming soon ** (help wanted)
+
+#### InMemoryConfigWrapper 
+The in memory wrapper is useful for unit test scenarios or where we want to hold onto a config temporarily. 
+
 
 ## Authors
 

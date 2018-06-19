@@ -46,6 +46,7 @@
   <ItemGroup>
     <None Include="data\test.json" />
     <Compile Include="IniTests.cs" />
+    <Compile Include="InMemoryConfigWrapperTests.cs" />
     <Compile Include="JsonTests.cs" />
     <Compile Include="WindowsRegistryConfigWrapperTests.cs" />
     <Compile Include="AppSettingsConfigWrapperTests.cs" />
