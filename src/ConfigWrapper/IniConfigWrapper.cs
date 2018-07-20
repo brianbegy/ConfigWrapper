@@ -59,18 +59,6 @@ namespace ConfigWrapper
         }
 
         /// <inheritdoc />
-        public T Get<T>(string key, T defaultValue)
-        {
-            return this.Get<T>(key, defaultValue, false);
-        }
-
-        /// <inheritdoc />
-        public T Get<T>(string key, T defaultValue, bool errorOnWrongType)
-        {
-            return this.GetValue(string.Empty, key).CastAsT<T>(defaultValue, errorOnWrongType);
-        }
-
-        /// <inheritdoc />
         public T[] Get<T>(string key, T[] defaultValue, char[] separators)
         {
             return this.GetValue(string.Empty, key).CastAsT<T>(defaultValue, separators);

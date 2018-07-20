@@ -30,17 +30,6 @@ namespace ConfigWrapper
             return System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(aa => aa.StartsWith(topKey)).ToArray();
         }
         
-        /// <inheritdoc/>
-        public T Get<T>(string key, T defaultValue)
-        {
-            return this.Get<T>(key, defaultValue, false);
-        }
-
-        /// <inheritdoc/>
-        public T Get<T>(string key, T defaultValue, bool errorOnWrongType = false)
-        {
-            return System.Configuration.ConfigurationManager.AppSettings[key].CastAsT<T>(defaultValue, errorOnWrongType);
-        }
 
         /// <inheritdoc/>
         public T[] Get<T>(string key, T[] defaultValue, char[] separators)

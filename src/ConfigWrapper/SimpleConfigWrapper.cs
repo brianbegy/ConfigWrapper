@@ -54,5 +54,21 @@ namespace ConfigWrapper
             return this.GetValue(key).CastAsT<T>(default(T), true);
         }
 
+        /// <inheritdoc/>
+        public virtual T Get<T>(string key, T defaultValue)
+        {
+            return this.Get<T>(key, defaultValue, false);
+        }
+
+        /// <inheritdoc/>
+        public virtual T Get<T>(string key, T defaultValue, bool errorOnWrongType)
+        {
+            if (this.AllKeys().Contains(key))
+            {
+                return this.GetValue(key).CastAsT<T>(defaultValue, errorOnWrongType);
+            }
+            return defaultValue;
+        }
+
     }
 }

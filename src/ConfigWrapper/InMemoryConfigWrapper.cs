@@ -34,37 +34,13 @@ namespace ConfigWrapper
             return storage.Keys.Where(aa => aa.StartsWith(topKey)).ToArray();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        public T Get<T>(string key, T defaultValue)
-        {
-            return this.Get<T>(key, defaultValue, false);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public T Get<T>(string key, T defaultValue, bool errorOnWrongType)
-        {
-            if (storage.ContainsKey(key))
-            {
-                return storage[key].CastAsT(defaultValue, errorOnWrongType);
-            }
-            return defaultValue;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         public T[] Get<T>(string key, T[] defaultValue, char[] separators)
         {
             return this.Get<T>(key, defaultValue, separators, false);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public T[] Get<T>(string key, T[] defaultValue, char[] separators, bool errorOnWrongType)
         {
             if (storage.ContainsKey(key))
