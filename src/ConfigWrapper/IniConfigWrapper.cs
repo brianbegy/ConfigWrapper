@@ -71,17 +71,6 @@ namespace ConfigWrapper
         }
 
         /// <inheritdoc />
-        public T[] Get<T>(string key, char[] separators)
-        {
-            if (!this.AllKeys().Contains(key))
-            {
-                throw new Exception(String.Format("No config value found for key {0}.", key));
-            }
-            // the default value below will never be used since we already ensured the key is present and have error on wrong type = true.
-            return this.GetValue(string.Empty, key).CastAsT<T>(new List<T>().ToArray(),separators,true);
-        }
-
-        /// <inheritdoc />
         public T[] Get<T>(string key, T[] defaultValue, char[] separators)
         {
             return this.GetValue(string.Empty, key).CastAsT<T>(defaultValue, separators);

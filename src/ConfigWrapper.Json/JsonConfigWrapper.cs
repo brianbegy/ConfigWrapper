@@ -114,7 +114,7 @@ namespace ConfigWrapper.Json
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 // do nothing
             }
