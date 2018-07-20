@@ -5,7 +5,7 @@
     <id>ConfigWrapper</id>
 
     <!-- The package version number that is used when resolving dependencies -->
-    <version>1.5.0</version>
+    <version>1.6.0</version>
 
     <!-- Authors contain text that appears directly on the gallery -->
     <authors>Brian Begy</authors>
@@ -18,7 +18,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
-    <releaseNotes>Add an in-memory config wrapper to support unit test scenarios.</releaseNotes>
+    <releaseNotes>Support required config values by throwing an exception when not found.</releaseNotes>
     <title>ConfigWrapper</title>
     <description>Helper classes to make it easier to work with config files in .net.  
       Supports using web.config, app.config, and Windows registry for configuration.  

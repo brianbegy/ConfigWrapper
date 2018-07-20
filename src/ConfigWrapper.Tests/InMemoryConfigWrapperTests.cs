@@ -33,12 +33,18 @@ namespace ConfigWrapper.Tests
             sut.Get<int>(key, defaultValue).Should().Be(expected);
         }
 
-
         [Test]
         public void BadValTest()
         {
             var ex = Assert.Throws<System.Exception>(() => sut.Get<double>("badVal", 78, true));
             Assert.That(ex.Message, Does.StartWith($"Cannot cast 'chicken'"));
+        }
+
+        [Test]
+        public void MissingKeyTest()
+        {
+            var ex = Assert.Throws<System.Exception>(() => sut.Get<double>("nosuchKey"));
+            Assert.That(ex.Message, Does.StartWith($"No config value found"));
         }
 
         [Test]

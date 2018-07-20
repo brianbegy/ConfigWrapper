@@ -1,15 +1,25 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace ConfigWrapper
 {
     /// <summary>
     /// Simple config wrapper that draws values from app.config and web.config
     /// </summary>
-    public class AppSettingsConfigWrapper : IConfigWrapper
+    public class AppSettingsConfigWrapper : SimpleConfigWrapper, IConfigWrapper
     {
-        public string[] AllKeys()
+        public override string[] AllKeys()
         {
             return System.Configuration.ConfigurationManager.AppSettings.AllKeys;
+        }
+
+        protected override string GetValue(string key)
+        {
+            if (this.AllKeys().Contains(key))
+            {
+                return System.Configuration.ConfigurationManager.AppSettings[key];
+            }
+            throw new Exception(String.Format("Key {0} not found.", key));
         }
 
         public string[] AllKeys(string topKey)

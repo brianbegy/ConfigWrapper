@@ -97,5 +97,12 @@ namespace ConfigWrapper.Tests
             result.Count().Should().Be(4);
             result.First().Should().Be(@"HKEY_CURRENT_USER\ConfigWrapper\Test\integerfound");
         }
+
+        [Test]
+        public void MissingKeyTest()
+        {
+            var ex = Assert.Throws<System.Exception>(() => sut.Get<double>(@"HKEY_CURRENT_USER\ConfigWrapper\nosuchKey"));
+            Assert.That(ex.Message, Does.StartWith($"No config value found"));
+        }
     }
 }

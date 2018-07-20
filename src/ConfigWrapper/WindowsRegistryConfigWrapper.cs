@@ -29,7 +29,7 @@ namespace ConfigWrapper
         {
             throw new NotImplementedException("The windows registry config wrapper does not support listing every registry key on the system.  That seems like a bad idea.");
         }
-        
+
         /// <inheritdoc />
         public string[] AllKeys(string topKey)
         {
@@ -37,24 +37,43 @@ namespace ConfigWrapper
             return this.GetChildren(top);
         }
 
-        private RegistryKey GetKey(string topKey) {
+        public T Get<T>(string key)
+        {
+           
+            if (!this.AllKeys(GetKeyAsArray(key)[0]).Contains(key))
+            {
+                throw new Exception(String.Format("No config value found for key {0}.", key));
+            }
+            // the default value below will never be used since we already ensured the key is present and have error on wrong type = true.
+            return this.Get(key, default(T), true);
+        }
+
+        private RegistryKey GetKey(string topKey)
+        {
 
             var keysAsList = this.GetKeyAsArray(topKey).ToList();
             var top = this.GetTopKey(keysAsList[0]);
             var currKey = top;
             keysAsList.RemoveAt(0);
-            while (keysAsList.Any()) {
-                if (keysAsList.Count() == 1) {
-                    if (keysAsList.Last() == currKey.Name) {
+            while (keysAsList.Any())
+            {
+                if (keysAsList.Count() == 1)
+                {
+                    if (keysAsList.Last() == currKey.Name)
+                    {
                         return currKey;
                     }
-                    if (currKey.GetSubKeyNames().Any(aa => aa == keysAsList.First())) {
+                    if (currKey.GetSubKeyNames().Any(aa => aa == keysAsList.First()))
+                    {
                         return currKey.OpenSubKey(keysAsList.First());
                     }
                 }
-                if (!currKey.GetSubKeyNames().Any(aa => aa == keysAsList.First())) {
+                if (!currKey.GetSubKeyNames().Any(aa => aa == keysAsList.First()))
+                {
                     throw new ArgumentException($"Registry key {currKey.Name} does not have a child key called {keysAsList.First()}.");
-                } else {
+                }
+                else
+                {
                     currKey = currKey.OpenSubKey(keysAsList.First());
                     keysAsList.RemoveAt(0);
                 }
@@ -65,9 +84,10 @@ namespace ConfigWrapper
         private string[] GetChildren(RegistryKey key)
         {
             var result = new List<string>();
-            foreach (var vals in key.GetValueNames()) {
-                result.Add($"{key.Name}\\{vals}"); 
-                        }
+            foreach (var vals in key.GetValueNames())
+            {
+                result.Add($"{key.Name}\\{vals}");
+            }
 
             foreach (var sk in key.GetSubKeyNames())
             {
@@ -75,7 +95,9 @@ namespace ConfigWrapper
             }
             return result.ToArray();
         }
-        private RegistryKey GetTopKey(string key) {
+
+        private RegistryKey GetTopKey(string key)
+        {
             if (HKLM.Contains(key.ToLowerInvariant()))
             {
                 return Registry.LocalMachine;
@@ -92,7 +114,7 @@ namespace ConfigWrapper
             }
             throw new NotImplementedException($"Cannot load key {key}.  Top level key must be one of: {String.Join(",", HKLM.Union(HKCU).Union(HKCC))}.");
         }
-    
+
         /// <inheritdocs />
         public T Get<T>(string key, T defaultValue)
         {
@@ -110,6 +132,18 @@ namespace ConfigWrapper
             }
 
             return value.CastAsT<T>(defaultValue, errorOnWrongType);
+        }
+
+        /// <inheritdocs />
+        public T[] Get<T>(string key, char[] separators)
+        {
+            if (!this.AllKeys(GetKeyAsArray(key)[0]).Contains(key))
+            {
+                throw new Exception(String.Format("No config value found for key {0}.", key));
+            }
+
+            // the default value below will never be used since we already ensured the key is present and have error on wrong type = true.
+            return this.Get(key, new List<T>().ToArray(), separators, true);
         }
 
         /// <inheritdocs />
@@ -200,9 +234,9 @@ namespace ConfigWrapper
         /// <param name="create">if it doesn't exist, create it?</param>
         /// <param name="openForWrite">open the key to write?</param>
         /// <returns>the registry key</returns>
-        private Microsoft.Win32.RegistryKey GetParentKey(string[] elements, bool create, bool openForWrite = false)
+        private RegistryKey GetParentKey(string[] elements, bool create, bool openForWrite = false)
         {
-            Microsoft.Win32.RegistryKey key = null;
+            RegistryKey key = null;
 
             for (int i = 0; i < elements.Length - 1; i++)
             {

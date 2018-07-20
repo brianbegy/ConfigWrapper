@@ -6,7 +6,7 @@ namespace ConfigWrapper
     /// <summary>
     /// used for in-memor situations, mainly unit tests
     /// </summary>
-    public class InMemoryConfigWrapper : IWritableConfigWrapper
+    public class InMemoryConfigWrapper : SimpleConfigWrapper, IWritableConfigWrapper
     {
         /// <summary>
         /// storage mechanism for in-memory ops
@@ -16,9 +16,14 @@ namespace ConfigWrapper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public string[] AllKeys()
+        public override string[] AllKeys()
         {
             return storage.Keys.ToArray();
+        }
+
+        protected override string GetValue(string key)
+        {
+            return storage[key];
         }
 
         /// <summary>
