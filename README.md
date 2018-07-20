@@ -63,6 +63,16 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000, true);
 //throws an Exception
 ```
 
+### Required config values
+If you do not pass in a default, it will error on missing values or values that cannot be cast.
+
+``` 
+IConfigWrapper = new AppSettingsConfigWrapper();
+var sleepMs = configWrapper.Get<int>("this-key-is-not-in-the-config");
+//  throws an exception
+```
+
+
 ### Sources
 Each config wrapper loads from a different source. 
 

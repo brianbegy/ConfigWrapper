@@ -9,7 +9,7 @@ namespace ConfigWrapper
     /// <summary>
     /// Loads values from an ini file
     /// </summary>
-    public class IniConfigWrapper : IConfigWrapper
+    public class IniConfigWrapper : SimpleConfigWrapper, IConfigWrapper
     {
         /// <summary>
         /// Path to the config file
@@ -59,18 +59,6 @@ namespace ConfigWrapper
         }
 
         /// <inheritdoc />
-        public T Get<T>(string key, T defaultValue)
-        {
-            return this.Get<T>(key, defaultValue, false);
-        }
-
-        /// <inheritdoc />
-        public T Get<T>(string key, T defaultValue, bool errorOnWrongType)
-        {
-            return this.GetValue(string.Empty, key).CastAsT<T>(defaultValue, errorOnWrongType);
-        }
-
-        /// <inheritdoc />
         public T[] Get<T>(string key, T[] defaultValue, char[] separators)
         {
             return this.GetValue(string.Empty, key).CastAsT<T>(defaultValue, separators);
@@ -81,7 +69,7 @@ namespace ConfigWrapper
         {
             return this.GetValue(string.Empty, key).CastAsT<T>(defaultValue, separators, errorOnWrongType);
         }
-
+        
         /// <summary>
         /// checks for the value in the config based on section
         /// </summary>
@@ -119,7 +107,17 @@ namespace ConfigWrapper
             }
             return null;
         }
-        
+
+        /// <summary>
+        /// checks for the value in the config based on section
+        /// </summary>
+        /// <param name="key">the key</param>
+        /// <returns>the value</returns>
+        protected override string GetValue(string key)
+        {
+            return this.GetValue(String.Empty, key);
+        }
+
         /// <inheritdoc />
         public string[] AllKeys(string topKey)
         {
@@ -127,7 +125,7 @@ namespace ConfigWrapper
         }
 
         /// <inheritdoc />
-        public string[] AllKeys()
+        public override string[] AllKeys()
         {
             return this.AllKeys(string.Empty);
         }

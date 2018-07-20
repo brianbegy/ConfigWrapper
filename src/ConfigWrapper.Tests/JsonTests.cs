@@ -54,5 +54,12 @@ namespace ConfigWrapper.Tests
             result.Should().Contain("string-array-found");
         }
 
+        [Test]
+        public void MissingKeyTest()
+        {
+            var ex = Assert.Throws<System.Exception>(() => sut.Get<double>("nosuchKey.nope.not.found"));
+            Assert.That(ex.Message, Does.StartWith($"No config value found"));
+        }
+
     }
 }

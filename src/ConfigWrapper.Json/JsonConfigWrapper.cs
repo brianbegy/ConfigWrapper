@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ConfigWrapper.Json
 {
-    public class JsonConfigWrapper : IConfigWrapper
+    public class JsonConfigWrapper : SimpleConfigWrapper, IConfigWrapper
     {
         /// <summary>
         /// internal json object
@@ -41,24 +41,14 @@ namespace ConfigWrapper.Json
         }
 
         /// <inheritdocs />
-        public T Get<T>(string key, T defaultValue)
+        protected override string GetValue(string key)
         {
-            return this.Get(key, defaultValue, false);
-        }
-
-        /// <inheritdocs />
-        public T Get<T>(string key, T defaultValue, bool errorOnWrongType)
-        {
-            Object obj = null;
-            try
+            if (this.AllKeys().Contains(key))
             {
-                obj = json.SelectToken(key);
+                var obj = json.SelectToken(key);
+                return obj.ToString();
             }
-            catch (Exception)
-            {
-                // do nothing
-            }
-            return obj.CastAsT<T>(defaultValue, false);
+            throw new Exception(String.Format("No config value found for key {0}.", key));
         }
 
         /// <inheritdocs />
@@ -114,7 +104,7 @@ namespace ConfigWrapper.Json
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // do nothing
             }
@@ -122,14 +112,14 @@ namespace ConfigWrapper.Json
             return obj.CastAsT<T>(defaultValue, separators, errorOnWrongType);
         }
 
-        public string[] AllKeys()
+        public override string[] AllKeys()
         {
-            return json.Descendants().Where(aa=>!aa.HasValues).Select(aa => System.Text.RegularExpressions.Regex.Replace(aa.Path,@"[\d]","").Replace("[]","")).Distinct().ToArray();
+            return json.Descendants().Where(aa => !aa.HasValues).Select(aa => System.Text.RegularExpressions.Regex.Replace(aa.Path, @"[\d]", "").Replace("[]", "")).Distinct().ToArray();
         }
 
         public string[] AllKeys(string topKey)
         {
-            return AllKeys().Where(aa=>aa.StartsWith(topKey)).ToArray();
+            return AllKeys().Where(aa => aa.StartsWith(topKey)).ToArray();
         }
 
     }
