@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace ConfigWrapper
 {
+    /// <summary>
+    /// abstract class that supports simple data stores such as dictionaries. 
+    /// </summary>
     public abstract class SimpleConfigWrapper
     {
         /// <summary>
