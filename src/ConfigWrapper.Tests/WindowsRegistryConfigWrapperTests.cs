@@ -100,7 +100,7 @@ namespace ConfigWrapper.Tests
         [Test]
         public void MissingKeyTest()
         {
-            var ex = Assert.Throws<System.Exception>(() => sut.Get<double>(@"HKEY_CURRENT_USER\ConfigWrapper\nosuchKey"));
+            var ex = Assert.Throws<System.Exception>(() => sut.Get<double>(@"nosuchKey"));
             Assert.That(ex.Message, Does.StartWith($"No config value found"));
         }
     }

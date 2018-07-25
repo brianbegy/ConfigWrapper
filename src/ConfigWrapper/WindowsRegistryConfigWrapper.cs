@@ -195,7 +195,32 @@ namespace ConfigWrapper
             return value.CastAsT<T[]>(defaultValue, errorOnWrongType);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// returns the value for the key.  If null or the wrong type, returns the default.
+        /// </summary>
+        /// <typeparam name="T">type of the value</typeparam>
+        /// <param name="key">key in the config</param>
+        /// <param name="defaultValue">default value to substitute if null</param>
+        /// <param name="errorOnWrongType">true = we should throw an error if the config data cannot be cast.  false = use default</param>
+        /// <param name="keyIsFullyQualified">Is the key like HKLM/Software/MyApplication/MyKey or just MyKey?</param>
+        /// <returns>value or default</returns>
+        public T Get<T>(string key, T defaultValue, bool errorOnWrongType, bool keyIsFullyQualified)
+        {
+            object value = null;
+            if (!keyIsFullyQualified)
+            {
+                key = FullKey(key);
+            }
+            using (var regKey = this.GetParentKey(key, false, false))
+            {
+                value = regKey.GetValue(this.GetKeyAsArray(key).Last());
+                regKey.Close();
+            }
+
+            return value.CastAsT<T>(defaultValue, errorOnWrongType);
+        }
+
+        /// <inheritdoc cref="IConfigWrapper" />
         public override T Get<T>(string key, T defaultValue, bool errorOnWrongType)
         {
             key = FullKey(key);
@@ -212,6 +237,20 @@ namespace ConfigWrapper
         public void Set<T>(string key, T value, bool createKeyIfNeeded)
         {
             key = FullKey(key);
+            this.Set(key,value,createKeyIfNeeded,true);
+        }
+
+
+        /// <summary>
+        /// Sets the key
+        /// </summary>
+        /// <typeparam name="T">the type of the value</typeparam>
+        /// <param name="key">the key to set</param>
+        /// <param name="value">the value to set</param>
+        /// <param name="createKeyIfNeeded">if no such key exists, create it or just throw an exception</param>
+        /// <param name="keyIsFullyQualified">is the key name fully qualified or is it a sub-key of the rootKey</param>
+        public void Set<T>(string key, T value, bool createKeyIfNeeded, bool keyIsFullyQualified)
+        {
             using (var regKey = this.GetParentKey(key, createKeyIfNeeded, true))
             {
                 regKey.SetValue(this.GetKeyAsArray(key).Last(), value.ToString());
@@ -236,7 +275,7 @@ namespace ConfigWrapper
         /// </summary>
         /// <param name="key">the key name</param>
         /// <param name="isFullyQualified">is this fully qualified.  e.g. does it include the RootKey node specified when you created the registry wrapper?</param>
-        public void Delete(string key, bool isFullyQualified = false)
+        public void Delete(string key, bool isFullyQualified)
         {
             if (!isFullyQualified)
             {
