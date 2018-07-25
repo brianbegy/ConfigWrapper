@@ -25,12 +25,15 @@ namespace ConfigWrapper
         /// </summary>
         private static readonly string[] HKCC = new[] { "hkcc", "hkey_current_config" };
 
-        private readonly string root = string.Empty;
+        /// <summary>
+        /// such as  HLKM/MySoftware
+        /// </summary>
+        public string RootKey { get; private set; }
 
         /// <summary>
         /// Creates a new WindowsRegistryConfigWrapper 
         /// </summary>
-        /// <param name="rootKey">what is the root key we wish to use? e.g. hklm/software/myapplication</param>
+        /// <param name="rootKey">what is the RootKey key we wish to use? e.g. hklm/software/myapplication</param>
         public WindowsRegistryConfigWrapper(string rootKey)
         {
             //we need to make the user input match how the registry names keys.
@@ -51,18 +54,33 @@ namespace ConfigWrapper
                 splitTmp[0] = "HKEY_LOCAL_MACHINE";
             }
 
-            root = String.Join("\\", splitTmp);
+            var rk = GetTopKey(splitTmp[0]);
+            for (int i = 1; i < splitTmp.Length; i++)
+            {
+                if (!rk.GetSubKeyNames().Any(aa => aa.Equals(splitTmp[0], StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    rk = rk.CreateSubKey(splitTmp[i]);
+                }
+                else
+                {
+                    rk = rk.OpenSubKey(splitTmp[i]);
+                }
+            }
+            var top = GetParentKey(splitTmp[0], true, true);
+            RootKey = String.Join("\\", splitTmp);
         }
 
+       /// <inheritdocs/>
         public override string[] AllKeys()
         {
-            var top = this.GetKey(root);
+            var top = this.GetKey(RootKey);
             return this.GetChildren(top);
         }
 
+        /// <inheritdocs/>
         protected override string GetValue(string key)
         {
-            if (!this.AllKeys().Any(aa=>aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
+            if (!this.AllKeys().Any(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
             {
                 throw new Exception(String.Format("No config value found for key {0}.", key));
             }
@@ -80,7 +98,7 @@ namespace ConfigWrapper
         /// <inheritdoc />
         public string[] AllKeys(string topKey)
         {
-            var top = this.GetKey(root + topKey);
+            var top = this.GetKey(RootKey + topKey);
             return this.GetChildren(top);
         }
 
@@ -184,6 +202,12 @@ namespace ConfigWrapper
             return base.Get<T>(key, defaultValue, errorOnWrongType);
         }
 
+        public override T Get<T>(string key)
+        {
+            key = FullKey(key);
+            return base.Get<T>(key);
+        }
+
         /// <inheritdocs />
         public void Set<T>(string key, T value, bool createKeyIfNeeded)
         {
@@ -201,10 +225,23 @@ namespace ConfigWrapper
             this.Set<T>(key, value, false);
         }
 
-        /// <inheritdocs/>
+        /// <inheritdocs />
         public void Delete(string key)
         {
-            key = $"{root}\\{key}".Replace(@"\\", @"\");
+            this.Delete(key, false);
+        }
+
+        /// <summary>
+        /// Deletes the key
+        /// </summary>
+        /// <param name="key">the key name</param>
+        /// <param name="isFullyQualified">is this fully qualified.  e.g. does it include the RootKey node specified when you created the registry wrapper?</param>
+        public void Delete(string key, bool isFullyQualified = false)
+        {
+            if (!isFullyQualified)
+            {
+                key = FullKey(key);
+            }
             var keyAsArray = this.GetKeyAsArray(key);
             if (keyAsArray.Length == 0)
             {
@@ -289,7 +326,7 @@ namespace ConfigWrapper
 
         private string FullKey(string key)
         {
-            var combined = $"{root}\\{key}".Replace("/","\\");
+            var combined = $"{RootKey}\\{key}".Replace("/", "\\");
             while (combined.Contains(@"\\"))
             {
                 combined = combined.Replace(@"\\", @"\");

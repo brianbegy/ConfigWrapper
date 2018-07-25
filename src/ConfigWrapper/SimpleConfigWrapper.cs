@@ -30,7 +30,7 @@ namespace ConfigWrapper
         /// <typeparam name="T">type of the value</typeparam>
         /// <param name="key">key in the config</param>
         /// <param name="separators">how to separate the array</param>
-        public T[] Get<T>(string key, char[] separators)
+        public virtual T[] Get<T>(string key, char[] separators)
         {
             if (!this.AllKeys().Any(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
             {
@@ -45,7 +45,7 @@ namespace ConfigWrapper
         /// </summary>
         /// <typeparam name="T">type of the value</typeparam>
         /// <param name="key">key in the config</param>
-        public T Get<T>(string key)
+        public virtual T Get<T>(string key)
         {
             if (!this.AllKeys().Any(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
             {

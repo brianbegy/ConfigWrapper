@@ -8,7 +8,7 @@ namespace ConfigWrapper.Tests
     [TestFixture]
     public class WindowsRegistryConfigWrapperTests
     {
-        IWritableConfigWrapper sut = new WindowsRegistryConfigWrapper("HKCU/ConfigWrapper/Test/");
+        WindowsRegistryConfigWrapper sut = new WindowsRegistryConfigWrapper("HKCU/ConfigWrapper/Test/");
 
         [OneTimeSetUp]
         public void Setup() {
@@ -36,7 +36,7 @@ namespace ConfigWrapper.Tests
                 DeleteKey("integerfound");
                 DeleteKey("stringfound");
                 DeleteKey("doublefound");
-                DeleteKey("Test");
+                sut.Delete(sut.RootKey,true);
             }
             catch (System.Exception)
             {
