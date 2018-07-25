@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,9 +30,9 @@ namespace ConfigWrapper
         /// <typeparam name="T">type of the value</typeparam>
         /// <param name="key">key in the config</param>
         /// <param name="separators">how to separate the array</param>
-        public T[] Get<T>(string key, char[] separators)
+        public virtual T[] Get<T>(string key, char[] separators)
         {
-            if (!this.AllKeys().Contains(key))
+            if (!this.AllKeys().Any(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
             {
                 throw new Exception(String.Format("No config value found for key {0}.", key));
             }
@@ -44,9 +45,9 @@ namespace ConfigWrapper
         /// </summary>
         /// <typeparam name="T">type of the value</typeparam>
         /// <param name="key">key in the config</param>
-        public T Get<T>(string key)
+        public virtual T Get<T>(string key)
         {
-            if (!this.AllKeys().Contains(key))
+            if (!this.AllKeys().Any(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
             {
                 throw new Exception(String.Format("No config value found for key {0}.", key));
             }
@@ -63,7 +64,7 @@ namespace ConfigWrapper
         /// <inheritdoc/>
         public virtual T Get<T>(string key, T defaultValue, bool errorOnWrongType)
         {
-            if (this.AllKeys().Contains(key))
+            if (this.AllKeys().Any(aa=>aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return this.GetValue(key).CastAsT<T>(defaultValue, errorOnWrongType);
             }

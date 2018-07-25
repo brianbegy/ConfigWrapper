@@ -11,7 +11,6 @@ namespace ConfigWrapper.Tests
 
         [Test]
         [TestCase("simplekey", "value", "foo")]
-        [TestCase("simpleKey", "value", "value")]
         [TestCase("missingKey", "value", "value")]
         [TestCase("category.key", "value", "foo")]
         [TestCase("topcategory.subcategory.key", "value", "foo")]

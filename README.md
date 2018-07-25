@@ -94,18 +94,18 @@ var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 1000);
 
 #### WindowsRegistryConfigWrapper
 
-Loads from the Windows registry.
+Loads from the Windows registry, defining a root key for my application.
 
 ``` 
-IWritableConfigWrapper = new WindowsRegistryConfigWrapper();
-configWrapper.Set<int>("HKLM/MyApplication/MyKey", 5000); 
+IWritableConfigWrapper = new WindowsRegistryConfigWrapper("HKLM/MyApplication/");
+configWrapper.Set<int>("MyKey", 5000); 
 var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
 // sleepMs = 5000
 ```
 
 ##### WARNING
 
-While the WindowsRegistryConfigWrapper will not modify root level keys e.g. "HKLM", it should be used with care.  It is a sharp knife, be careful.
+While the WindowsRegistryConfigWrapper will not modify root level keys e.g. "`", it should be used with care.  It is a sharp knife, be careful.
 
 #### IniConfigWrapper
 
@@ -139,4 +139,4 @@ This project is licensed under the MIT License
 
 ## Acknowledgments
 
-* Hat tip to the teams at Spotlite (RallyHealth) and Guaranteed Rate for their feedback.
+* Hat tip to the teams at Spotlite (RallyHealth), Guaranteed Rate, GrubHub, and Endava for their feedback.

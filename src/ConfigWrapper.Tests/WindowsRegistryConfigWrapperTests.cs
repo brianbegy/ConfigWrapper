@@ -8,14 +8,14 @@ namespace ConfigWrapper.Tests
     [TestFixture]
     public class WindowsRegistryConfigWrapperTests
     {
-        IWritableConfigWrapper sut = new WindowsRegistryConfigWrapper();
+        WindowsRegistryConfigWrapper sut = new WindowsRegistryConfigWrapper("HKCU/ConfigWrapper/Test/");
 
         [OneTimeSetUp]
         public void Setup() {
-            sut.Set<int>("HKCU/ConfigWrapper/Test/integerfound", 1234, true);
-            sut.Set<string>("HKCU/ConfigWrapper/Test/stringfound", "stringfound", true);
-            sut.Set<double>("HKCU/ConfigWrapper/Test/doublefound", 12345.67D, true);
-            sut.Set<string>("HKCU/ConfigWrapper/Test/stringArrayFound", "spam|spam|spam|spam|spam|baked beans|spam");
+            sut.Set<int>("integerfound", 1234, true);
+            sut.Set<string>("stringfound", "stringfound", true);
+            sut.Set<double>("doublefound", 12345.67D, true);
+            sut.Set<string>("stringArrayFound", "spam|spam|spam|spam|spam|baked beans|spam");
         }
 
         private void DeleteKey(string key) {
@@ -33,11 +33,10 @@ namespace ConfigWrapper.Tests
         public void Teadown() {
             try
             {
-                DeleteKey("HKCU/ConfigWrapper/Test/integerfound");
-                DeleteKey("HKCU/ConfigWrapper/Test/stringfound");
-                DeleteKey("HKCU/ConfigWrapper/Test/doublefound");
-                DeleteKey("HKCU/ConfigWrapper/Test");
-                DeleteKey("HKCU/ConfigWrapper");
+                DeleteKey("integerfound");
+                DeleteKey("stringfound");
+                DeleteKey("doublefound");
+                sut.Delete(sut.RootKey,true);
             }
             catch (System.Exception)
             {
@@ -47,8 +46,8 @@ namespace ConfigWrapper.Tests
         }
 
         [Test]
-        [TestCase("HKCU/ConfigWrapper/Test/invalidkey", 999, 999)]
-        [TestCase("HKCU/ConfigWrapper/Test/integerfound", 100, 1234)]
+        [TestCase("invalidkey", 999, 999)]
+        [TestCase("integerfound", 100, 1234)]
         public void IntegerTests(string key, int defaultValue, int expectedValue)
         {
             var result = sut.Get<int>(key, defaultValue);
@@ -56,8 +55,8 @@ namespace ConfigWrapper.Tests
         }
 
         [Test]
-        [TestCase("HKCU/ConfigWrapper/Test/invalidkey", "foo", "foo")]
-        [TestCase("HKCU/ConfigWrapper/Test/stringFound", "foo", "stringfound")]
+        [TestCase("invalidkey", "foo", "foo")]
+        [TestCase("stringFound", "foo", "stringfound")]
         public void StringTests(string key, string defaultValue, string expectedValue)
         {
             var result = sut.Get<string>(key, defaultValue);
@@ -65,8 +64,8 @@ namespace ConfigWrapper.Tests
         }
 
         [Test]
-        [TestCase("HKCU/ConfigWrapper/Test/invalidkey", 1.99D, 1.99D)]
-        [TestCase("HKCU/ConfigWrapper/Test/doublefound", 1.99D, 12345.67D)]
+        [TestCase("invalidkey", 1.99D, 1.99D)]
+        [TestCase("doublefound", 1.99D, 12345.67D)]
         public void DoubleTests(string key, double defaultValue, double expectedValue)
         {
             var result = sut.Get<double>(key, defaultValue);
@@ -74,8 +73,8 @@ namespace ConfigWrapper.Tests
         }
 
         [Test]
-        [TestCase("HKCU/ConfigWrapper/Test/invalid-key", new[] { "pork", "beans" }, new[] { "pork", "beans" })]
-        [TestCase("HKCU/ConfigWrapper/Test/stringArrayFound", new[] { "pork", "beans" }, new[] { "spam", "spam", "spam", "spam", "spam", "baked beans", "spam" })]
+        [TestCase("invalid-key", new[] { "pork", "beans" }, new[] { "pork", "beans" })]
+        [TestCase("stringArrayFound", new[] { "pork", "beans" }, new[] { "spam", "spam", "spam", "spam", "spam", "baked beans", "spam" })]
         public void StringArrayTests(string key, string[] defaultValue, string[] expectedValue)
         {
             var result = sut.Get<string>(key, defaultValue, new[] { ',','|' });
@@ -83,7 +82,7 @@ namespace ConfigWrapper.Tests
         }
 
         [Test]
-        [TestCase("HKCU/ConfigWrapper/Test/stringfound", 11, 1.09D)]
+        [TestCase("stringfound", 11, 1.09D)]
         public void DoubleBadCastTest(string key, double defaultValue, double expectedValue)
         {
             var ex = Assert.Throws<System.Exception>(() => sut.Get<double>(key, defaultValue, true));
@@ -93,15 +92,15 @@ namespace ConfigWrapper.Tests
         [Test]
         public void GetKeys()
         {
-            var result = sut.AllKeys("HKCU/ConfigWrapper");
+            var result = sut.AllKeys();
             result.Count().Should().Be(4);
-            result.First().Should().Be(@"HKEY_CURRENT_USER\ConfigWrapper\Test\integerfound");
+            result.Contains(@"HKEY_CURRENT_USER\ConfigWrapper\Test\integerfound");
         }
 
         [Test]
         public void MissingKeyTest()
         {
-            var ex = Assert.Throws<System.Exception>(() => sut.Get<double>(@"HKEY_CURRENT_USER\ConfigWrapper\nosuchKey"));
+            var ex = Assert.Throws<System.Exception>(() => sut.Get<double>(@"nosuchKey"));
             Assert.That(ex.Message, Does.StartWith($"No config value found"));
         }
     }
