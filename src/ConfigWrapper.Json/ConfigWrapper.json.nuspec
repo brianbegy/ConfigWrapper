@@ -5,7 +5,7 @@
     <id>ConfigWrapper.Json</id>
 
     <!-- The package version number that is used when resolving dependencies -->
-    <version>1.3.0</version>
+    <version>1.4.0</version>
 
     <!-- Authors contain text that appears directly on the gallery -->
     <authors>Brian Begy</authors>
@@ -18,7 +18,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
-    <releaseNotes>Support required config values by throwing an exception when not found.</releaseNotes>
+    <releaseNotes>Make keys case-insensitive.</releaseNotes>
     <title>ConfigWrapper.Json</title>
     <description>Helper classes to make it easier to work with json config files. Part of the ConfigWrapper project.</description>
     <copyright>Copyright ©2018 Brian Begy</copyright>
