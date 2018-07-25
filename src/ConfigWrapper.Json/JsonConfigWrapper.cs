@@ -43,9 +43,10 @@ namespace ConfigWrapper.Json
         /// <inheritdocs />
         protected override string GetValue(string key)
         {
-            if (this.AllKeys().Contains(key))
+            if (this.AllKeys().Any(aa=>aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
             {
-                var obj = json.SelectToken(key);
+                var newKey = this.AllKeys().First(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)); //get case-sensitive name since JSON cares
+                var obj = json.SelectToken(newKey);
                 return obj.ToString();
             }
             throw new Exception(String.Format("No config value found for key {0}.", key));

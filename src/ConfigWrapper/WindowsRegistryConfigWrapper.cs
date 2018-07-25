@@ -8,7 +8,7 @@ namespace ConfigWrapper
     /// <summary>
     /// Configuration wrapper that uses the Windows registry to store values
     /// </summary>
-    public class WindowsRegistryConfigWrapper : IConfigWrapper, IWritableConfigWrapper
+    public class WindowsRegistryConfigWrapper : SimpleConfigWrapper, IConfigWrapper, IWritableConfigWrapper
     {
         /// <summary>
         /// acceptable names for HKLM
@@ -25,32 +25,67 @@ namespace ConfigWrapper
         /// </summary>
         private static readonly string[] HKCC = new[] { "hkcc", "hkey_current_config" };
 
-        public string[] AllKeys()
+        private readonly string root = string.Empty;
+
+        /// <summary>
+        /// Creates a new WindowsRegistryConfigWrapper 
+        /// </summary>
+        /// <param name="rootKey">what is the root key we wish to use? e.g. hklm/software/myapplication</param>
+        public WindowsRegistryConfigWrapper(string rootKey)
         {
-            throw new NotImplementedException("The windows registry config wrapper does not support listing every registry key on the system.  That seems like a bad idea.");
+            //we need to make the user input match how the registry names keys.
+            var tmp = rootKey.Replace("/", "\\");
+            var splitTmp = tmp.Split(new[] { '\\' });
+            if (HKCU.Contains(splitTmp[0].ToLowerInvariant()))
+            {
+                splitTmp[0] = "HKEY_CURRENT_USER";
+            }
+
+            if (HKCC.Contains(splitTmp[0].ToLowerInvariant()))
+            {
+                splitTmp[0] = "HKEY_CURRENT_CONFIG";
+            }
+
+            if (HKLM.Contains(splitTmp[0].ToLowerInvariant()))
+            {
+                splitTmp[0] = "HKEY_LOCAL_MACHINE";
+            }
+
+            root = String.Join("\\", splitTmp);
+        }
+
+        public override string[] AllKeys()
+        {
+            var top = this.GetKey(root);
+            return this.GetChildren(top);
+        }
+
+        protected override string GetValue(string key)
+        {
+            if (!this.AllKeys().Any(aa=>aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                throw new Exception(String.Format("No config value found for key {0}.", key));
+            }
+            // the default value below will never be used since we already ensured the key is present and have error on wrong type = true.
+            string value = null;
+            using (var regKey = this.GetParentKey(key, false, false))
+            {
+                value = regKey.GetValue(this.GetKeyAsArray(key).Last()).ToString();
+                regKey.Close();
+            }
+
+            return value;
         }
 
         /// <inheritdoc />
         public string[] AllKeys(string topKey)
         {
-            var top = this.GetKey(topKey);
+            var top = this.GetKey(root + topKey);
             return this.GetChildren(top);
-        }
-
-        public T Get<T>(string key)
-        {
-           
-            if (!this.AllKeys(GetKeyAsArray(key)[0]).Contains(key))
-            {
-                throw new Exception(String.Format("No config value found for key {0}.", key));
-            }
-            // the default value below will never be used since we already ensured the key is present and have error on wrong type = true.
-            return this.Get(key, default(T), true);
         }
 
         private RegistryKey GetKey(string topKey)
         {
-
             var keysAsList = this.GetKeyAsArray(topKey).ToList();
             var top = this.GetTopKey(keysAsList[0]);
             var currKey = top;
@@ -116,46 +151,15 @@ namespace ConfigWrapper
         }
 
         /// <inheritdocs />
-        public T Get<T>(string key, T defaultValue)
-        {
-            return this.Get<T>(key, defaultValue, false);
-        }
-
-        /// <inheritdocs />
-        public T Get<T>(string key, T defaultValue, bool errorOnWrongType)
-        {
-            object value = null;
-            using (var regKey = this.GetParentKey(key, false, false))
-            {
-                value = regKey.GetValue(this.GetKeyAsArray(key).Last());
-                regKey.Close();
-            }
-
-            return value.CastAsT<T>(defaultValue, errorOnWrongType);
-        }
-
-        /// <inheritdocs />
-        public T[] Get<T>(string key, char[] separators)
-        {
-            if (!this.AllKeys(GetKeyAsArray(key)[0]).Contains(key))
-            {
-                throw new Exception(String.Format("No config value found for key {0}.", key));
-            }
-
-            // the default value below will never be used since we already ensured the key is present and have error on wrong type = true.
-            return this.Get(key, new List<T>().ToArray(), separators, true);
-        }
-
-        /// <inheritdocs />
         public T[] Get<T>(string key, T[] defaultValue, char[] separators)
         {
             object value = null;
+            key = FullKey(key);
             using (var regKey = this.GetParentKey(key, false, false))
             {
                 value = regKey.GetValue(this.GetKeyAsArray(key).Last());
                 regKey.Close();
             }
-
             return value.CastAsT<T>(defaultValue, separators, false);
         }
 
@@ -163,6 +167,7 @@ namespace ConfigWrapper
         public T[] Get<T>(string key, T[] defaultValue, char[] separators, bool errorOnWrongType)
         {
             object value = null;
+            key = FullKey(key);
             using (var regKey = this.GetParentKey(key, false, false))
             {
                 value = regKey.GetValue(this.GetKeyAsArray(key).Last());
@@ -172,9 +177,17 @@ namespace ConfigWrapper
             return value.CastAsT<T[]>(defaultValue, errorOnWrongType);
         }
 
+        /// <inheritdoc/>
+        public override T Get<T>(string key, T defaultValue, bool errorOnWrongType)
+        {
+            key = FullKey(key);
+            return base.Get<T>(key, defaultValue, errorOnWrongType);
+        }
+
         /// <inheritdocs />
         public void Set<T>(string key, T value, bool createKeyIfNeeded)
         {
+            key = FullKey(key);
             using (var regKey = this.GetParentKey(key, createKeyIfNeeded, true))
             {
                 regKey.SetValue(this.GetKeyAsArray(key).Last(), value.ToString());
@@ -185,16 +198,13 @@ namespace ConfigWrapper
         /// <inheritdocs />
         public void Set<T>(string key, T value)
         {
-            using (var regKey = this.GetParentKey(key, false, true))
-            {
-                regKey.SetValue(this.GetKeyAsArray(key).Last(), value.ToString());
-                regKey.Close();
-            }
+            this.Set<T>(key, value, false);
         }
 
         /// <inheritdocs/>
         public void Delete(string key)
         {
+            key = $"{root}\\{key}".Replace(@"\\", @"\");
             var keyAsArray = this.GetKeyAsArray(key);
             if (keyAsArray.Length == 0)
             {
@@ -270,11 +280,22 @@ namespace ConfigWrapper
         /// <summary>
         /// Splits the key path into an array
         /// </summary>
-        /// <param name="key">HKLM\MYKey\ etc.</param>
+        /// <param name="key">HKLM/MYKey/ etc.</param>
         /// <returns>array of strings</returns>
         private string[] GetKeyAsArray(string key)
         {
             return key.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private string FullKey(string key)
+        {
+            var combined = $"{root}\\{key}".Replace("/","\\");
+            while (combined.Contains(@"\\"))
+            {
+                combined = combined.Replace(@"\\", @"\");
+            }
+
+            return combined;
         }
     }
 }
