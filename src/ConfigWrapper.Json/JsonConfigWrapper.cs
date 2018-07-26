@@ -43,7 +43,7 @@ namespace ConfigWrapper.Json
         /// <inheritdocs />
         protected override string GetValue(string key)
         {
-            if (this.AllKeys().Any(aa=>aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
+            if (this.ContainsKey(key))
             {
                 var newKey = this.AllKeys().First(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)); //get case-sensitive name since JSON cares
                 var obj = json.SelectToken(newKey);

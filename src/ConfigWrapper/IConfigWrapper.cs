@@ -75,5 +75,12 @@ namespace ConfigWrapper
         /// <param name="errorOnWrongType">true = we should throw an error if the config data cannot be cast.  false = use default</param>
         /// <returns>value or default</returns>
         T[] Get<T>(string key, T[] defaultValue, char[] separators, bool errorOnWrongType);
+
+        /// <summary>
+        /// Returns true if the key exists in the collection
+        /// </summary>
+        /// <param name="key">the key to check</param>
+        /// <returns></returns>
+        bool ContainsKey(string key);
     }
 }

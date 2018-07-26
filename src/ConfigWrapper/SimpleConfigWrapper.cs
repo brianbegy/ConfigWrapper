@@ -32,7 +32,7 @@ namespace ConfigWrapper
         /// <param name="separators">how to separate the array</param>
         public virtual T[] Get<T>(string key, char[] separators)
         {
-            if (!this.AllKeys().Any(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
+            if (!this.ContainsKey(key))
             {
                 throw new Exception(String.Format("No config value found for key {0}.", key));
             }
@@ -47,7 +47,7 @@ namespace ConfigWrapper
         /// <param name="key">key in the config</param>
         public virtual T Get<T>(string key)
         {
-            if (!this.AllKeys().Any(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
+            if (!this.ContainsKey(key))
             {
                 throw new Exception(String.Format("No config value found for key {0}.", key));
             }
@@ -55,20 +55,26 @@ namespace ConfigWrapper
             return this.GetValue(key).CastAsT<T>(default(T), true);
         }
 
-        /// <inheritdoc/>
+        ///  <inheritdoc cref="IConfigWrapper" />
         public virtual T Get<T>(string key, T defaultValue)
         {
             return this.Get<T>(key, defaultValue, false);
         }
 
-        /// <inheritdoc/>
+        ///  <inheritdoc cref="IConfigWrapper" />
         public virtual T Get<T>(string key, T defaultValue, bool errorOnWrongType)
         {
-            if (this.AllKeys().Any(aa=>aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
+            if (this.ContainsKey(key))
             {
                 return this.GetValue(key).CastAsT<T>(defaultValue, errorOnWrongType);
             }
             return defaultValue;
+        }
+
+        ///  <inheritdoc cref="IConfigWrapper" />
+        public virtual bool ContainsKey(string key)
+        {
+            return this.AllKeys().Contains(key, StringComparison.CurrentCultureIgnoreCase);
         }
 
     }

@@ -56,6 +56,14 @@ namespace ConfigWrapper.Tests
         }
 
         [Test]
+        [TestCase("invalidkey", false)]
+        [TestCase("stringFound", true)]
+        public void ContainsKeyTests(string key, bool result)
+        {
+            sut.ContainsKey(key).Should().Be(result);
+        }
+
+        [Test]
         [TestCase("invalidkey", "foo", "foo")]
         [TestCase("stringFound", "foo", "stringfound")]
         [TestCase("StRiNgFoUnD", "foo", "stringfound")]

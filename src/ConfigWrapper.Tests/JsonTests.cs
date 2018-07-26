@@ -60,5 +60,14 @@ namespace ConfigWrapper.Tests
             Assert.That(ex.Message, Does.StartWith($"No config value found"));
         }
 
+        [Test]
+        [TestCase("invalidkey", false)]
+        [TestCase("topcategory.subcategory.key", true)]
+        [TestCase("simplekey", true)]
+        public void ContainsKeyTests(string key, bool result)
+        {
+            sut.ContainsKey(key).Should().Be(result);
+        }
+
     }
 }

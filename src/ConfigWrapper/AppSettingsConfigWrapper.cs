@@ -21,26 +21,30 @@ namespace ConfigWrapper
             {
                 return System.Configuration.ConfigurationManager.AppSettings[key];
             }
+
             throw new Exception(String.Format("Key {0} not found.", key));
         }
 
         /// <inheritdoc/>
         public string[] AllKeys(string topKey)
         {
-            return System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(aa => aa.StartsWith(topKey)).ToArray();
+            return System.Configuration.ConfigurationManager.AppSettings.AllKeys.Where(aa => aa.StartsWith(topKey))
+                .ToArray();
         }
-        
+
 
         /// <inheritdoc/>
         public T[] Get<T>(string key, T[] defaultValue, char[] separators)
         {
-            return System.Configuration.ConfigurationManager.AppSettings[key].CastAsT<T>(defaultValue, separators, false);
+            return System.Configuration.ConfigurationManager.AppSettings[key]
+                .CastAsT<T>(defaultValue, separators, false);
         }
 
         /// <inheritdoc/>
         public T[] Get<T>(string key, T[] defaultValue, char[] separators, bool errorOnWrongType = false)
         {
-            return System.Configuration.ConfigurationManager.AppSettings[key].CastAsT<T>(defaultValue, separators, errorOnWrongType);
+            return System.Configuration.ConfigurationManager.AppSettings[key]
+                .CastAsT<T>(defaultValue, separators, errorOnWrongType);
         }
     }
 }
