@@ -99,7 +99,7 @@ Loads from the Windows registry, defining a root key for my application.
 ``` 
 IWritableConfigWrapper = new WindowsRegistryConfigWrapper("HKLM/Software/MyApplication/");
 configWrapper.Set<int>("MyKey", 5000); 
-var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
+var sleepMs = configWrapper.Get<int>("MyKey", 5000);
 // sleepMs = 5000
 ```
 
@@ -108,7 +108,7 @@ You can also give it fully-qualified key names as well, but it will use the cano
 ``` 
 IWritableConfigWrapper = new WindowsRegistryConfigWrapper("HKLM/Software/MyApplication/");
 configWrapper.Set<int>("HKEY_LOCAL_MACHINE/Software/MyApplication/MyKey", 5000); 
-var sleepMs = configWrapper.Get<int>("sleep-time-in-ms", 5000);
+var sleepMs = configWrapper.Get<int>("HKEY_LOCAL_MACHINE/Software/MyApplication/MyKey", 5000);
 // sleepMs = 5000
 ```
 
