@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConfigWrapper
 {
@@ -79,8 +80,19 @@ namespace ConfigWrapper
 
                 return result.ToArray();
             }
-
             return defaultValue;
+        }
+
+        /// <summary>
+        /// Overloads .Contains with string comparison
+        /// </summary>
+        /// <param name="input">the array to test</param>
+        /// <param name="value">the value you seek</param>
+        /// <param name="c">how to compare</param>
+        /// <returns></returns>
+        public static bool Contains(this string[] input, string value, StringComparison c)
+        {
+            return input.Any(aa => aa.Equals(value, c));
         }
     }
 }

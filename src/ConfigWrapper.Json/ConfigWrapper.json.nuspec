@@ -5,7 +5,7 @@
     <id>ConfigWrapper.Json</id>
 
     <!-- The package version number that is used when resolving dependencies -->
-    <version>1.4.0</version>
+    <version>1.5.0</version>
 
     <!-- Authors contain text that appears directly on the gallery -->
     <authors>Brian Begy</authors>
@@ -18,7 +18,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <!-- Any details about this particular release -->
-    <releaseNotes>Make keys case-insensitive.</releaseNotes>
+    <releaseNotes>Add ContainsKey("foo") to config wrappers.</releaseNotes>
     <title>ConfigWrapper.Json</title>
     <description>Helper classes to make it easier to work with json config files. Part of the ConfigWrapper project.</description>
     <copyright>Copyright ©2018 Brian Begy</copyright>
@@ -26,7 +26,7 @@
     <!-- Tags appear in the gallery and can be used for tag searches -->
     <tags>configuration</tags>
     <dependencies>
-      <dependency id="ConfigWrapper" version="1.6.0"/>
+      <dependency id="ConfigWrapper" version="1.8.0"/>
       <dependency id="Newtonsoft.Json" version="11.0.0"/>
     </dependencies>
 

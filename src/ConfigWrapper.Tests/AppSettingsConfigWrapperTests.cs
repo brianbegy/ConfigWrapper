@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Linq;
+using FluentAssertions;
 
 namespace ConfigWrapper.Tests
 {
@@ -81,5 +82,14 @@ namespace ConfigWrapper.Tests
             var ex = Assert.Throws<System.Exception>(() => sut.Get<double>("nosuchKey"));
             Assert.That(ex.Message, Does.StartWith($"No config value found"));
         }
+
+        [Test]
+        [TestCase("invalidkey", false)]
+        [TestCase("string-found", true)]
+        public void ContainsKeyTests(string key, bool result)
+        {
+            sut.ContainsKey(key).Should().Be(result);
+        }
+
     }
 }

@@ -48,6 +48,14 @@ namespace ConfigWrapper.Tests
         }
 
         [Test]
+        [TestCase("invalidkey", false)]
+        [TestCase("goodInt", true)]
+        public void ContainsKeyTests(string key, bool result)
+        {
+            sut.ContainsKey(key).Should().Be(result);
+        }
+
+        [Test]
         public void AllKeysTests()
         {
             sut.AllKeys().Should().BeEquivalentTo(new[] { "foo", "badVal", "goodInt", "biff.baz", "biff.foo" });

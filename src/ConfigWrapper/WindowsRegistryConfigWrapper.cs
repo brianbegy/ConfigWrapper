@@ -57,7 +57,7 @@ namespace ConfigWrapper
             var rk = GetTopKey(splitTmp[0]);
             for (int i = 1; i < splitTmp.Length; i++)
             {
-                if (!rk.GetSubKeyNames().Any(aa => aa.Equals(splitTmp[0], StringComparison.CurrentCultureIgnoreCase)))
+                if (!rk.GetSubKeyNames().Contains(splitTmp[0]))
                 {
                     rk = rk.CreateSubKey(splitTmp[i]);
                 }
@@ -80,7 +80,7 @@ namespace ConfigWrapper
         /// <inheritdocs/>
         protected override string GetValue(string key)
         {
-            if (!this.AllKeys().Any(aa => aa.Equals(key, StringComparison.CurrentCultureIgnoreCase)))
+            if (!this.ContainsKey(key))
             {
                 throw new Exception(String.Format("No config value found for key {0}.", key));
             }
@@ -227,13 +227,14 @@ namespace ConfigWrapper
             return base.Get<T>(key, defaultValue, errorOnWrongType);
         }
 
+        /// <inheritdoc cref="IConfigWrapper"/>.
         public override T Get<T>(string key)
         {
             key = FullKey(key);
             return base.Get<T>(key);
         }
 
-        /// <inheritdocs />
+        /// <inheritdoc cref="IConfigWrapper"/>.
         public void Set<T>(string key, T value, bool createKeyIfNeeded)
         {
             key = FullKey(key);
@@ -258,13 +259,13 @@ namespace ConfigWrapper
             }
         }
 
-        /// <inheritdocs />
+        /// <inheritdoc cref="IWritableConfigWrapper"/>.
         public void Set<T>(string key, T value)
         {
             this.Set<T>(key, value, false);
         }
 
-        /// <inheritdocs />
+        /// <inheritdoc cref="IWritableConfigWrapper"/>.
         public void Delete(string key)
         {
             this.Delete(key, false);
@@ -299,6 +300,12 @@ namespace ConfigWrapper
                     regKey.DeleteSubKey(keyAsArray.Last());
                 }
             }
+        }
+
+        /// <inheritdoc cref="IConfigWrapper"/>.
+        public override bool ContainsKey(string key)
+        {
+            return base.ContainsKey(FullKey(key));
         }
 
         /// <summary>
