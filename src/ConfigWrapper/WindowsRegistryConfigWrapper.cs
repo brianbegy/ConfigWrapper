@@ -365,6 +365,11 @@ namespace ConfigWrapper
 
         private string FullKey(string key)
         {
+            if (key.StartsWith(RootKey))
+            {
+                return key.Replace(@"\\", @"\");
+            }
+
             var combined = $"{RootKey}\\{key}".Replace("/", "\\");
             while (combined.Contains(@"\\"))
             {
