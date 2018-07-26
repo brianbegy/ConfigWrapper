@@ -15,6 +15,7 @@ namespace ConfigWrapper.Tests
             sut.Set<int>("integerfound", 1234, true);
             sut.Set<string>("stringfound", "stringfound", true);
             sut.Set<double>("doublefound", 12345.67D, true);
+            sut.Set<string>("this.key.has.periods", "foo", true);
             sut.Set<string>("stringArrayFound", "spam|spam|spam|spam|spam|baked beans|spam");
         }
 
@@ -57,6 +58,9 @@ namespace ConfigWrapper.Tests
         [Test]
         [TestCase("invalidkey", "foo", "foo")]
         [TestCase("stringFound", "foo", "stringfound")]
+        [TestCase("StRiNgFoUnD", "foo", "stringfound")]
+        [TestCase("this.key.has.periods", "foo", "foo")]
+        [TestCase("HKCU/ConfigWrapper/Test/this.key.has.periods", "foo", "foo")]
         public void StringTests(string key, string defaultValue, string expectedValue)
         {
             var result = sut.Get<string>(key, defaultValue);
@@ -93,7 +97,7 @@ namespace ConfigWrapper.Tests
         public void GetKeys()
         {
             var result = sut.AllKeys();
-            result.Count().Should().Be(4);
+            result.Count().Should().Be(5);
             result.Contains(@"HKEY_CURRENT_USER\ConfigWrapper\Test\integerfound");
         }
 
